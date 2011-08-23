@@ -6,7 +6,7 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
-            if (!strstr($item, '-')) {
+            if (!strstr($item, '-') || preg_match('/-{3,}/', $item)) {
                 throw new InvalidArgumentException('Missing dash for input');
             }
 
