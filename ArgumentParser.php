@@ -6,6 +6,10 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
+            if (!strstr($item, '-')) {
+                throw new InvalidArgumentException('Missing dash for input');
+            }
+
             $realItem = str_replace('-', '', $item);
 
             if (strstr($item, '=')) {
