@@ -9,24 +9,32 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
-            if (!$this->isValid($item)) {
-                throw new InvalidArgumentException('Incorrect argument specified');
-            }
-            $realItem = str_replace('-', '', $item);
-
-            if (strstr($item, '=')) {
-                $args = array_merge($args, $this->getOptionAndValue($item));
-                continue;
-            }
-
-            if (!strstr($item, '--')) {
-                $args = array_merge($args, $this->parseShortBooleanOption($realItem));
-                continue;
-            }
-            $args = array_merge($args, $this->parseLongBooleanOption($realItem));
+            $args = array_merge(
+                $args,
+                $this->parseParam($item)
+            );
         }
 
         return $args;
+    }
+
+    protected function parseParam($item)
+    {
+        if (!$this->isValid($item)) {
+            throw new InvalidArgumentException('Incorrect argument specified');
+        }
+
+        $realItem = str_replace('-', '', $item);
+
+        if (strstr($item, '=')) {
+            return $this->getOptionAndValue($item);
+        }
+
+        if (!strstr($item, '--')) {
+            return $this->parseShortBooleanOption($realItem);
+        }
+
+        return $this->parseLongBooleanOption($realItem);
     }
 
     protected function isValid($arg)
