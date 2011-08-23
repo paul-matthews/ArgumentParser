@@ -68,6 +68,12 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->ap->parse(array('-f=bar'));
     }
 
+    public function testParserOnlyParseValidOptionsExceptsMissingDashes()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $this->ap->parse(array(7));
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
