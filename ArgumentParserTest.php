@@ -7,13 +7,13 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
     {
         $ap = new ArgumentParser();
 
-        $this->assertSame(array('a' => true), $ap->parse('-a'));
+        $this->assertSame(array('a' => true), $ap->parse(array('-a')));
     }
 
     public function testParserConvertsManyShortOptionsToBooleans()
     {
         $ap = new ArgumentParser();
 
-        $this->assertSame(array('a' => true, 'b' => true), $ap->parse('-a -b'));
+        $this->assertSame(array('a' => true, 'b' => true), $ap->parse(array('-a', '-b')));
     }
 }
