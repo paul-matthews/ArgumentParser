@@ -118,7 +118,7 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
 
     public function testSetOptionConfiguresMandatorOption()
     {
-        $this->ap->setOption('a:');
+        $this->ap->setOptions('a:');
 
         $this->assertTrue(in_array('a', $this->ap->getOptions(ArgumentParser::MANDATORY)));
     }
