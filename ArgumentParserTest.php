@@ -15,7 +15,10 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
 
     public function testParserConvertsManyShortOptionsTogetherToBooleans()
     {
-        $this->assertSame(array('a' => true, 'b' => true, 'c' => true), $this->ap->parse(array('-abc')));
+        $this->assertSame(
+            array('a' => true, 'b' => true, 'c' => true),
+            $this->ap->parse(array('-abc'))
+        );
     }
 
     public function setUp()
