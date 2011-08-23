@@ -11,14 +11,14 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
+            $curretArgs = array();
             try {
-                $args = array_merge(
-                    $args,
-                    $this->parseParam($item)
-                );
+                $curretArgs = $this->parseParam($item);
             } catch (InvalidArgumentException $e) {
                 // Do nothing as no loggin available.
             }
+
+            $args = array_merge($args, $this->convertAliases($curretArgs));
         }
 
         return $args;
@@ -27,6 +27,15 @@ class ArgumentParser
     public function setAlias($alias, $toKey)
     {
         $this->_aliases[$alias] = $toKey;
+    }
+
+    public function getAlias($key)
+    {
+        if (isset($this->_aliases[$key])) {
+            return $this->_aliases[$key];
+        }
+
+        return $key;
     }
 
     public function getAliases()
@@ -51,6 +60,16 @@ class ArgumentParser
         }
 
         return $this->parseLongBooleanOption($realItem);
+    }
+
+    protected function convertAliases($params)
+    {
+        $finalParams = array();
+        foreach ($params as $key => $value) {
+            $finalParams[$this->getAlias($key)] = $value;
+        }
+
+        return $finalParams;
     }
 
     protected function isValid($arg)
