@@ -116,6 +116,13 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->assertSame(array($toKey => true), $this->ap->parse(array("--$fromKey")));
     }
 
+    public function testSetOptionConfiguresMandatorOption()
+    {
+        $this->ap->setOption('a:');
+
+        $this->assertTrue(in_array('a', $this->ap->getOptions(ArgumentParser::MANDATORY)));
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
