@@ -2,11 +2,14 @@
 
 class ArgumentParser
 {
+    const THREE_OR_MORE_DAHSES = '/-{3,}/';
+    const OPTION_VALUE_GROUP = '/-+(\w+)="(\w+)"/';
+
     public function parse($input)
     {
         $args = array();
         foreach ($input as $item) {
-            if (!strstr($item, '-') || preg_match('/-{3,}/', $item)) {
+            if (!strstr($item, '-') || preg_match(self::THREE_OR_MORE_DAHSES, $item)) {
                 throw new InvalidArgumentException('Missing dash for input');
             }
 
@@ -39,7 +42,7 @@ class ArgumentParser
 
     protected function getOptionAndValue($string)
     {
-        preg_match_all('/-+(\w+)="(\w+)"/', $string, $matches);
+        preg_match_all(self::OPTION_VALUE_GROUP, $string, $matches);
 
         if (count($matches) != 3 || count($matches[1]) != 1 || count($matches[2]) != 1) {
             throw new InvalidArgumentException('Incorrect Parameters Format');
