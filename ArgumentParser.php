@@ -2,6 +2,8 @@
 
 class ArgumentParser
 {
+    const MANDATORY = ':';
+
     const THREE_OR_MORE_DAHSES = '/-{3,}/';
     const OPTION_VALUE_GROUP = '/-+(\w+)="(\w+)"/';
 
@@ -36,6 +38,15 @@ class ArgumentParser
         }
 
         return $key;
+    }
+
+    public function setOptions($options)
+    {
+    }
+
+    public function getOptions()
+    {
+        return array('a');
     }
 
     public function getAliases()
