@@ -58,26 +58,22 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
 
     public function testParserOnlyParseValidOptionsMissingQuotes()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        $this->ap->parse(array('--foo=bar'));
+        $this->assertSame(array(), $this->ap->parse(array('--foo=bar')));
     }
 
     public function testParserOnlyParseValidOptionsMissingQuotesForShortOpt()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        $this->ap->parse(array('-f=bar'));
+        $this->assertSame(array(), $this->ap->parse(array('-f=bar')));
     }
 
     public function testParserOnlyParseValidOptionsExceptsMissingDashes()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        $this->ap->parse(array(7));
+        $this->assertSame(array(), $this->ap->parse(array(7)));
     }
 
     public function testParserOnlyParseValidOptionsExceptsTooManyDashes()
     {
-        $this->setExpectedException('InvalidArgumentException');
-        $this->ap->parse(array('---a'));
+        $this->assertSame(array(), $this->ap->parse(array('---a')));
     }
 
     public function setUp()
