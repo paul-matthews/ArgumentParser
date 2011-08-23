@@ -5,6 +5,8 @@ class ArgumentParser
     const THREE_OR_MORE_DAHSES = '/-{3,}/';
     const OPTION_VALUE_GROUP = '/-+(\w+)="(\w+)"/';
 
+    protected $_aliases;
+
     public function parse($input)
     {
         $args = array();
@@ -20,6 +22,16 @@ class ArgumentParser
         }
 
         return $args;
+    }
+
+    public function setAlias($alias, $toKey)
+    {
+        $this->_aliases[$alias] = $toKey;
+    }
+
+    public function getAliases()
+    {
+        return $this->_aliases;
     }
 
     protected function parseParam($item)
