@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/ArgumentParser.php');
 
 class ArgumentParserTest extends PHPUnit_Framework_TestCase
 {
@@ -6,6 +7,6 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
     {
         $ap = new ArgumentParser();
 
-        $this->assert(array('a' => true), $ap->parse('-a'));
+        $this->assertSame(array('a' => true), $ap->parse('-a'));
     }
 }
