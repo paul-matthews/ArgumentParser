@@ -6,7 +6,14 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
-            foreach (str_split(str_replace('-', '', $item)) as $subItem) {
+            $realItem = str_replace('-', '', $item);
+
+            $items = array($realItem);
+            if (!strstr($item, '--')) {
+                $items = str_split($realItem);
+            }
+
+            foreach ($items as $subItem) {
                 $args[$subItem] = true;
             }
         }
