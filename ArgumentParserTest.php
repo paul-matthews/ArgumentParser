@@ -52,7 +52,7 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             array('foo' => 'bar'),
-            $this->ap->parse(array('--foo="barr"'))
+            $this->ap->parse(array('--foo="bar"'))
         );
     }
 
