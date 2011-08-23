@@ -21,6 +21,17 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testParserConvertsManySeparatedShortOptionsTogetherToBooleans()
+    {
+        $this->assertSame(
+            array(
+                'a' => true, 'b' => true, 'c' => true,
+                'd' => true, 'e' => true, 'f' => true,
+            ),
+            $this->ap->parse(array('-abc', '-def'))
+        );
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
