@@ -9,8 +9,7 @@ class ArgumentParser
             $realItem = str_replace('-', '', $item);
 
             if (strstr($item, '=')) {
-                list($option, $value) = $this->getOptionAndValue($item);
-                $args[$option] = $value;
+                $args = array_merge($args, $this->getOptionAndValue($item));
                 continue;
             }
 
@@ -37,6 +36,6 @@ class ArgumentParser
     protected function getOptionAndValue($string)
     {
         preg_match_all('/-+(\w+)="(\w+)"/', $string, $matches);
-        return array($matches[1][0], $matches[2][0]);
+        return array($matches[1][0] => $matches[2][0]);
     }
 }
