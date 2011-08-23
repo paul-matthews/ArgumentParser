@@ -9,10 +9,14 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
-            $args = array_merge(
-                $args,
-                $this->parseParam($item)
-            );
+            try {
+                $args = array_merge(
+                    $args,
+                    $this->parseParam($item)
+                );
+            } catch (InvalidArgumentException $e) {
+                // Do nothing as no loggin available.
+            }
         }
 
         return $args;
