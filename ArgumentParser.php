@@ -36,6 +36,11 @@ class ArgumentParser
     protected function getOptionAndValue($string)
     {
         preg_match_all('/-+(\w+)="(\w+)"/', $string, $matches);
+
+        if (count($matches) != 3 || count($matches[1]) != 1 || count($matches[2]) != 1) {
+            throw new InvalidArgumentException('Incorrect Parameters Format');
+        }
+
         return array($matches[1][0] => $matches[2][0]);
     }
 }
