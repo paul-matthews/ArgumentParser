@@ -86,6 +86,13 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->assertSame(array('foo' => true), $this->ap->parse(array('--foo')));
     }
 
+    public function testCreateAliasSetsAlias()
+    {
+        $this->ap->setAlias('f', 'foo');
+
+        $this->assertSame(array('f' => 'foo'), $this->ap->getAliases());
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
