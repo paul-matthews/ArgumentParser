@@ -58,7 +58,7 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
 
     public function testParserOnlyParseValidOptionsMissingQuotes()
     {
-        $this->setExpectedException('InvalidArgumentsException');
+        $this->setExpectedException('InvalidArgumentException');
         $this->ap->parse(array('--foo=bar'));
     }
 
