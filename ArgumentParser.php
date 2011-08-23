@@ -9,10 +9,9 @@ class ArgumentParser
     {
         $args = array();
         foreach ($input as $item) {
-            if (!strstr($item, '-') || preg_match(self::THREE_OR_MORE_DAHSES, $item)) {
-                throw new InvalidArgumentException('Missing dash for input');
+            if (!$this->isValid($item)) {
+                throw new InvalidArgumentException('Incorrect argument specified');
             }
-
             $realItem = str_replace('-', '', $item);
 
             if (strstr($item, '=')) {
@@ -28,6 +27,14 @@ class ArgumentParser
         }
 
         return $args;
+    }
+
+    protected function isValid($arg)
+    {
+        if (!strstr($arg, '-') || preg_match(self::THREE_OR_MORE_DAHSES, $arg)) {
+            return false;
+        }
+        return true;
     }
 
     protected function parseShortBooleanOption($string)
