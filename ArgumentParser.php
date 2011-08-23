@@ -3,11 +3,13 @@
 class ArgumentParser
 {
     const MANDATORY = ':';
+    const ALL = '*';
 
     const THREE_OR_MORE_DAHSES = '/-{3,}/';
     const OPTION_VALUE_GROUP = '/-+(\w+)="(\w+)"/';
 
-    protected $_aliases;
+    protected $_aliases = array();
+    protected $_options = array();
 
     public function parse($input)
     {
@@ -42,11 +44,38 @@ class ArgumentParser
 
     public function setOptions($options)
     {
+        preg_match_all('/\w:*/i', $options, $matches);
+
+        foreach ($matches[0] as $match) {
+            if (strstr($match, self::MANDATORY)) {
+                $match = str_replace(self::MANDATORY, '', $match);
+                if (!isset($this->_options[self::MANDATORY])) {
+                    $this->_options[self::MANDATORY] = array();
+                }
+
+                $this->_options[self::MANDATORY][] = $match;
+            }
+        }
     }
 
-    public function getOptions()
+    public function getOptions($type = self::ALL)
     {
-        return array('a');
+        $options = array();
+        switch ($type) {
+            case self::MANDATORY:
+                if (isset($this->_options[self::MANDATORY])) {
+                    $options = $this->_options[self::MANDATORY];
+                }
+                break;
+            case self::ALL:
+            default:
+                foreach ($this->_options as $option) {
+                    $options = array_merge($options, $option);
+                }
+                break;
+        }
+
+        return $options;
     }
 
     public function getAliases()
