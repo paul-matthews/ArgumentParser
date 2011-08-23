@@ -40,6 +40,14 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testParserConvertsManyLongOptionsIntoBooleans()
+    {
+        $this->assertSame(
+            array('foo' => true, 'bar' => true),
+            $this->ap->parse(array('--foo', '--bar'))
+        );
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
