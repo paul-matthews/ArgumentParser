@@ -96,7 +96,7 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->assertSame($toKey, $this->ap->getAlias($fromKey));
     }
 
-    public function testParseConvertsAliasedKeys()
+    public function testParseConvertsAliasedKeysForShortopt()
     {
         $fromKey = 'f';
         $toKey = 'foo';
@@ -104,6 +104,16 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->ap->setAlias($fromKey, $toKey);
 
         $this->assertSame(array($toKey => true), $this->ap->parse(array("-$fromKey")));
+    }
+
+    public function testParseConvertsAliasedKeysForLongopts()
+    {
+        $fromKey = 'f';
+        $toKey = 'foo';
+
+        $this->ap->setAlias($fromKey, $toKey);
+
+        $this->assertSame(array($toKey => true), $this->ap->parse(array("--$fromKey")));
     }
 
     public function setUp()
