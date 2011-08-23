@@ -2,8 +2,14 @@
 
 class ArgumentParser
 {
-    public function parse()
+    public function parse($input)
     {
-        return array('a' => true);
+        $args = array();
+        foreach ($input as $item) {
+            $item = str_replace('-', '', $item);
+            $args[$item] = true;
+        }
+
+        return $args;
     }
 }
