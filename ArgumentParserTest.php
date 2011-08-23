@@ -56,6 +56,12 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testParserOnlyParseValidOptionsMissingQuotes()
+    {
+        $this->setExpectedException('InvalidArgumentsException');
+        $this->ap->parse(array('--foo=bar'));
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
