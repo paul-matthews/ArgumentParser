@@ -14,17 +14,24 @@ class ArgumentParser
                 continue;
             }
 
-            $items = array($realItem);
             if (!strstr($item, '--')) {
-                $items = str_split($realItem);
+                $args = array_merge($args, $this->parseShortBooleanOption($realItem));
+                continue;
             }
-
-            foreach ($items as $subItem) {
-                $args[$subItem] = true;
-            }
+            $args = array_merge($args, $this->parseLongBooleanOption($realItem));
         }
 
         return $args;
+    }
+
+    protected function parseShortBooleanOption($string)
+    {
+        return array_fill_keys(str_split($string), true);
+    }
+
+    protected function parseLongBooleanOption($string)
+    {
+        return array_fill_keys(explode(' ', $string), true);
     }
 
     protected function getOptionAndValue($string)
