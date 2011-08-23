@@ -5,15 +5,21 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
 {
     public function testParserConvertsShortOptionsToBooleans()
     {
-        $ap = new ArgumentParser();
-
-        $this->assertSame(array('a' => true), $ap->parse(array('-a')));
+        $this->assertSame(array('a' => true), $this->ap->parse(array('-a')));
     }
 
     public function testParserConvertsManyShortOptionsToBooleans()
     {
-        $ap = new ArgumentParser();
+        $this->assertSame(array('a' => true, 'b' => true), $this->ap->parse(array('-a', '-b')));
+    }
 
-        $this->assertSame(array('a' => true, 'b' => true), $ap->parse(array('-a', '-b')));
+    public function setUp()
+    {
+        $this->ap = new ArgumentParser();
+    }
+
+    public function tearDown()
+    {
+        unset($this->ap);
     }
 }
