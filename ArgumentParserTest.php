@@ -48,6 +48,14 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testParserAddsTheValueToEqualSignedSeparatedLongOptions()
+    {
+        $this->assertSame(
+            array('foo' => 'bar'),
+            $this->ap->parse(array('--foo="barr"'))
+        );
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
