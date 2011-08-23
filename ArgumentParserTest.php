@@ -88,9 +88,12 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
 
     public function testSetAliasConfiguresAlias()
     {
-        $this->ap->setAlias('f', 'foo');
+        $fromKey = 'f';
+        $toKey = 'foo';
 
-        $this->assertSame(array('f' => 'foo'), $this->ap->getAliases());
+        $this->ap->setAlias($fromKey, $toKey);
+
+        $this->assertSame($toKey, $this->ap->getAlias($fromKey));
     }
 
     public function testParseConvertsAliasedKeys()
