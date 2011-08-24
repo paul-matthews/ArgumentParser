@@ -38,6 +38,15 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->assertSame(array('foo' => 'bar'), $this->ap->parse(array('--foo="bar"')));
     }
 
+    public function testPraseOnlyParseValidOptions()
+    {
+        $this->assertSame(array(), $this->ap->parse(array(
+            'foo',
+            '--foo=blah',
+            'f',
+        )));
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();

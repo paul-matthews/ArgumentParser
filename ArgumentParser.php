@@ -16,11 +16,15 @@ class ArgumentParser
 
     protected function parseItem($arg)
     {
-        if (strpos($arg, '=')) {
+        if (strpos($arg, '=') > 0) {
             return $this->parseValue($arg);
         }
 
-        return $this->parseBoolean($arg);
+        if (strpos($arg, '-') === 0) {
+            return $this->parseBoolean($arg);
+        }
+
+        return array();
     }
 
     protected function parseBoolean($arg)
@@ -36,8 +40,11 @@ class ArgumentParser
 
     protected function parseValue($arg)
     {
-        preg_match('/^--([^=]+)="([^"]+)"/', $arg, $matches);
+        preg_match('/^-{1,2}([^=]+)="([^"]+)"/', $arg, $matches);
 
-        return array($matches[1] => $matches[2]);
+        if (count($matches) == 3) {
+            return array($matches[1] => $matches[2]);
+        }
+        return array();
     }
 }
