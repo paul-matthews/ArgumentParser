@@ -2,16 +2,33 @@
 
 class ArgumentParser
 {
+    private $aliases;
 
     public function parse($args)
     {
         $arguments = array();
-
         foreach ($args as $arg) {
-            $arguments = array_merge($arguments, $this->parseItem($arg));
+            foreach ($this->parseItem($arg) as $key => $value) {
+                $arguments[$this->getAlias($key)] = $value;
+            }
         }
 
         return $arguments;
+    }
+
+    public function setAlias($from, $to)
+    {
+        $this->aliases[$from] = $to;
+        return $this;
+    }
+
+    protected function getAlias($from)
+    {
+        if (isset($this->aliases[$from])) {
+            return $this->aliases[$from];
+        }
+
+        return $from;
     }
 
     protected function parseItem($arg)
