@@ -8,7 +8,7 @@ class ArgumentParser
         $keys = array();
 
         foreach ($args as $arg) {
-            $keys[] = ltrim($arg, '-');
+            $keys = array_merge($keys, str_split(ltrim($arg, '-')));
         }
 
         return array_fill_keys($keys, true);
