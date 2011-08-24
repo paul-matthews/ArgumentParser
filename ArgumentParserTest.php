@@ -91,7 +91,17 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $fromKey = 'f';
         $toKey = 'foo';
 
-        $this->ap->setAlias($fromKey, $toKey);
+        $this->ap->addAlias($fromKey, $toKey);
+
+        $this->assertSame($toKey, $this->ap->getAlias($fromKey));
+    }
+
+    public function testSetAliasWithArgumentAliasConfiguresAlias()
+    {
+        $fromKey = 'f';
+        $toKey = 'foo';
+
+        $this->ap->addAlias(new ArgumentAlias($fromKey, $toKey));
 
         $this->assertSame($toKey, $this->ap->getAlias($fromKey));
     }
@@ -101,7 +111,7 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $fromKey = 'f';
         $toKey = 'foo';
 
-        $this->ap->setAlias($fromKey, $toKey);
+        $this->ap->addAlias($fromKey, $toKey);
 
         $this->assertSame(array($toKey => true), $this->ap->parse(array("-$fromKey")));
     }
@@ -111,7 +121,7 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $fromKey = 'f';
         $toKey = 'foo';
 
-        $this->ap->setAlias($fromKey, $toKey);
+        $this->ap->addAlias($fromKey, $toKey);
 
         $this->assertSame(array($toKey => true), $this->ap->parse(array("--$fromKey")));
     }

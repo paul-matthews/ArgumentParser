@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/ArgumentAlias.php');
 
 class ArgumentParser
 {
@@ -28,15 +29,22 @@ class ArgumentParser
         return $args;
     }
 
-    public function setAlias($alias, $toKey)
+    public function addAlias($alias, $toKey = null)
     {
-        $this->_aliases[$alias] = $toKey;
+        if (!($alias instanceof ArgumentAlias)) {
+            $alias = new ArgumentAlias($alias, $toKey);
+        }
+
+        $this->_aliases[] = $alias;
     }
 
     public function getAlias($key)
     {
-        if (isset($this->_aliases[$key])) {
-            return $this->_aliases[$key];
+        foreach ($this->_aliases as $alias)
+        {
+            if ($alias->matches($key)) {
+                return $alias->convert($key);
+            }
         }
 
         return $key;
