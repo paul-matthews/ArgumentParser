@@ -3,8 +3,14 @@
 class ArgumentParser
 {
 
-    public function parse()
+    public function parse($args)
     {
-        return array('a' => true);
+        $keys = array();
+
+        foreach ($args as $arg) {
+            $keys[] = ltrim($arg, '-');
+        }
+
+        return array_fill_keys($keys, true);
     }
 }
