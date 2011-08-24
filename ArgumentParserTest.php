@@ -23,6 +23,11 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->getTrueForKeys('abcdef'), $this->ap->parse(array('-abc', '-def')));
     }
 
+    public function testParseConvertsLongOptionsIntoBooleans()
+    {
+        $this->assertSame($this->getTrueForKeys(array('foo')), $this->ap->parse(array('--foo')));
+    }
+
     public function setUp()
     {
         $this->ap = new ArgumentParser();
