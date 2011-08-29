@@ -1,0 +1,24 @@
+The argument parser
+### ######## ######
+
+The specification I wish to implement:
+
+* The command can take any number of Arguments
+    * Command Arguments not Option Arguments
+* Options may be indicated by -, / or either
+* Parameters may or may not be case sensitive
+* Options can have arguments
+    * Separated by whitespace
+    * Separated by a character: :, =
+    * Mandatory Arguments
+    * Optional Arguments
+* Single Character Options can be combined
+* Help text can be displayed by:
+    * ?
+    * -?
+    * -h
+    * /?
+    * /h
+    * -help
+    * --help
+* -- Escapes all remaining output
