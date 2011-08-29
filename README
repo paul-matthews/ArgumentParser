@@ -3,16 +3,48 @@ The argument parser
 
 The specification I wish to implement:
 
+ArgumentParser:
+* There are 2 types of options, long options and short options
+  * [E.g] Short Option: -b
+  * [E.g] Long Option: --bee
+
+* Either option can have no value, an optional value or a mandatory value
+  * Short Specs:
+    * [E.g] Sepcified as: "b" No value
+    * [E.g] Sepcified as: "b:" Mandatory value
+    * [E.g] Sepcified as: "b::" Optional value
+  * Long Specs:
+    * [E.g] Sepcified as: "bee" No value
+    * [E.g] Sepcified as: "bee:" Mandatory value
+    * [E.g] Sepcified as: "bee::" Optional value
+* Many short options can be specified at once
+    * [E.g] Sepcified as: "b:cd::" No values
+* Only one long option can be specified at once
+    * [E.g] Sepcified as: "bee:" Mandatory value
+* Incorrect Options can either: Cause an Error or Ommit from results
+* Missing Options can either: Cause an Error or Ommit from results
+* All unassigned values will belong to the command
+* The short option indicator can be either - or /
+* The long option indicator can only be -
+* Options can be either case sensitive or case insensitive
+* Aliases can be configured between options
+
+* Short Options are parsed as a single occurance of the option indicator
+    * [E.g] "-b"
+* Short Options with no value are returned as True
+* Short Options can be combined
+    * [E.g] "-abc"
+* Long Options are parsed with a prceeding "--"
+    * [E.g] "--bee"
+* Values can be separated from their option by :, = or whitespace
+* The last combined short option can contain a vlue
+    * [E.g] "-abc=d"
+* Values can be encompassed in single, double or no quotes
+    * [E.g] "--foo='bar'"
+    * [E.g] '--foo="bar"'
+
 * The command can take any number of Arguments
     * Command Arguments not Option Arguments
-* Options may be indicated by -, / or either
-* Parameters may or may not be case sensitive
-* Options can have arguments
-    * Separated by whitespace
-    * Separated by a character: :, =
-    * Mandatory Arguments
-    * Optional Arguments
-* Single Character Options can be combined
 * Help text can be displayed by:
     * ?
     * -?
@@ -21,4 +53,4 @@ The specification I wish to implement:
     * /h
     * -help
     * --help
-* -- Escapes all remaining output
+* -- Escapes all remaining output as command values
