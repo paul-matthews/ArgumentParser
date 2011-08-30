@@ -10,6 +10,19 @@ class ArgumentParser
         $this->options = array();
     }
 
+    public function parse($params)
+    {
+        $command = new Command($params);
+
+        foreach ($command as $arg) {
+            foreach ($this->options as $option) {
+                $command = $option->parse($arg, $command);
+            }
+        }
+
+        return $command->getResults();
+    }
+
     public function addOption(Option_Interface $option)
     {
         $this->options[] = $option;

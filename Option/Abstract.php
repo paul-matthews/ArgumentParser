@@ -20,4 +20,14 @@ class Option_Abstract
     {
         return $this->arugment;
     }
+
+    public function toArray()
+    {
+        return array( $this->getName() => $this->getArgument()->getValue());
+    }
+
+    public function __clone()
+    {
+        $this->arugment = clone $this->arugment;
+    }
 }
