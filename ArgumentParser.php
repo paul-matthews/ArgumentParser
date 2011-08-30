@@ -3,6 +3,7 @@
 class ArgumentParser
 {
     private $options;
+    private $filters;
     private $optionFactory;
 
     public function __construct()
@@ -12,7 +13,7 @@ class ArgumentParser
 
     public function parse($params)
     {
-        $command = new Command($params);
+        $command = new Command($params, $this->getFilters());
 
         foreach ($command as $arg) {
             foreach ($this->options as $option) {
@@ -77,5 +78,21 @@ class ArgumentParser
         }
 
         return $this->optionFactory;
+    }
+
+    protected function getFilters()
+    {
+        if (is_null($this->filters)) {
+            $this->filters = $this->getDefaultFilters();
+        }
+
+        return $this->filters;
+    }
+
+    protected function getDefaultFilters()
+    {
+        return array(
+            new Filter_ManyShortOptions(),
+        );
     }
 }

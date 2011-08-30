@@ -4,11 +4,27 @@ class Command implements Iterator
 {
     private $params;
     private $options;
+    private $preFilters;
 
-    public function __construct($params)
+    public function __construct($params, $preFilters = array())
     {
-        $this->params = $params;
+        $this->preFilters = $preFilters;
         $this->options = array();
+
+        $this->setParams($params);
+    }
+
+    private function setParams($params)
+    {
+        if (!is_array($params)) {
+            $params = array();
+        }
+
+        foreach ($this->preFilters as $preFilter) {
+            $params = $preFilter->filter($params);
+        }
+
+        $this->params = $params;
     }
 
     public function addOption(Option_Interface $option)
@@ -59,6 +75,7 @@ class Command implements Iterator
         foreach ($this->options as $option) {
             $results = array_merge($results, $option->toArray());
         }
+
         return $results;
     }
 }

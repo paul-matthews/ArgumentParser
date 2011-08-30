@@ -76,6 +76,13 @@ class ArgumentParserTest extends PHPUnit_Framework_TestCase
         $this->assertSame(array(), $this->ap->parse(array('-b')));
     }
 
+    public function testShortOptionsCanBeCombined()
+    {
+        $this->ap->addOptions('cba');
+
+        $this->assertSame(array('a' => true, 'b' => true, 'c' => true), $this->ap->parse(array('-abc')));
+    }
+
     public function testLongOptionAreParsed()
     {
         $this->ap->addLongOptions('bee');
