@@ -16,6 +16,25 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->static->getOption('a') instanceof Getopt_Command_Option_Short);
     }
 
+    public function testStaticCommandAttemptsParse()
+    {
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('foo'),
+            )
+        ))->getResponse();
+
+        $found = false;
+        foreach ($response->toArray() as $command) {
+            if ($command['name'] = self::DEFAULT_NAME) {
+                $found = true;
+            }
+        }
+
+        $this->assertTrue($found);
+    }
+
     public function testSetShortOptionString()
     {
         $this->static->addOptions('a');

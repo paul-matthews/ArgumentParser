@@ -3,15 +3,58 @@
 class Getopt_Request_Array implements Getopt_Request_Interface
 {
     private $tokens;
+    private $response;
 
-    public function __construct(array $input)
+    public function __construct(array $input, Getopt_Response $response = null)
     {
         $this->setTokens($input);
+
+        if (is_null($response)) {
+            $response = new Getopt_Response();
+        }
+
+        $this->setResponse($response);
     }
 
     public function getTokens()
     {
         return $this->tokens;
+    }
+
+    public function setResponse(Getopt_Response $response)
+    {
+        $this->response = $response;
+        return $this;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    public function current()
+    {
+        return current($this->tokens);
+    }
+
+    public function next()
+    {
+        return next($this->tokens);
+    }
+
+    public function rewind()
+    {
+        return reset($this->tokens);
+    }
+
+    public function valid()
+    {
+        return (boolean) $this->current();
+    }
+
+    public function key()
+    {
+        return key($this->tokens);
     }
 
     protected function setTokens($input)
@@ -21,5 +64,6 @@ class Getopt_Request_Array implements Getopt_Request_Interface
                 $this->tokens[] = $token;
             }
         }
+        return $this;
     }
 }

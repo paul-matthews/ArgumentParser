@@ -1,6 +1,6 @@
 <?php
 
-interface Getopt_Request_Interface
+interface Getopt_Request_Interface extends Iterator
 {
     public function getTokens();
 }
