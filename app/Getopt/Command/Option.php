@@ -2,11 +2,20 @@
 
 class Getopt_Command_Option
 {
-    public function getOptions($rawOptions)
+    public function getShortOptions($rawOptions)
     {
         $options = array();
         foreach ($this->getSeparateOptions($rawOptions) as $option) {
-            $options[] = new Getopt_Command_Option_Short($option);
+            $options[] = new Getopt_Command_Option_Short($option, new Getopt_Command_Argument_None());
+        }
+        return $options;
+    }
+
+    public function getLongOptions($rawOptions)
+    {
+        $options = array();
+        foreach ($rawOptions as $option) {
+            $options[] = new Getopt_Command_Option_Long($option, new Getopt_Command_Argument_None());
         }
         return $options;
     }

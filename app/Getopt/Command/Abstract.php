@@ -4,6 +4,7 @@ abstract class Getopt_Command_Abstract
 {
     private $name;
     protected $optionFactory;
+    protected $argumentFactory;
     protected $options;
 
     public function __construct($name)
@@ -24,7 +25,25 @@ abstract class Getopt_Command_Abstract
 
     public function addOptions($options)
     {
-        foreach ($this->getOptionFactory()->getOptions($options) as $option) {
+        foreach ($this->getOptionFactory()->getShortOptions($options) as $option) {
+            $option->setArgument(
+                $this->getArgumentFactory()->getArgument($option->getRawName())
+            );
+            $this->addOption($option);
+        }
+        return $this;
+    }
+
+    public function addLongOptions($options)
+    {
+        if (!is_array($options)) {
+            $options = array($options);
+        }
+
+        foreach ($this->getOptionFactory()->getLongOptions($options) as $option) {
+            $option->setArgument(
+                $this->getArgumentFactory()->getArgument($option->getRawName())
+            );
             $this->addOption($option);
         }
         return $this;
@@ -48,5 +67,14 @@ abstract class Getopt_Command_Abstract
         }
 
         return $this->optionFactory;
+    }
+
+    protected function getArgumentFactory()
+    {
+        if (is_null($this->argumentFactory)) {
+            $this->argumentFactory = new Getopt_Command_Argument();
+        }
+
+        return $this->argumentFactory;
     }
 }
