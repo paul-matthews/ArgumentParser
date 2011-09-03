@@ -21,13 +21,6 @@ ArgumentParser:
     * [E.g] Sepcified as: "b:cd::" No values
 * Only one long option can be specified at once
     * [E.g] Sepcified as: "bee:" Mandatory value
-* Incorrect Options can either: Cause an Error or Ommit from results
-* Missing Options can either: Cause an Error or Ommit from results
-* All unassigned values will belong to the command
-* The short option indicator can be either - or /
-* The long option indicator can only be -
-* Options can be either case sensitive or case insensitive
-* Aliases can be configured between options
 
 * Short Options are parsed as a single occurance of the option indicator
     * [E.g] "-b"
@@ -42,6 +35,14 @@ ArgumentParser:
 * Values can be encompassed in single, double or no quotes
     * [E.g] "--foo='bar'"
     * [E.g] '--foo="bar"'
+
+* All unassigned values will belong to the command
+* Incorrect Options can either: Cause an Error or Ommit from results
+* Missing Options can either: Cause an Error or Ommit from results
+* The short option indicator can be either - or /
+* The long option indicator can only be -
+* Options can be either case sensitive or case insensitive
+* Aliases can be configured between options
 
 * The command can take any number of Arguments
     * Command Arguments not Option Arguments
