@@ -90,6 +90,19 @@ class CommandTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetLongAliasOnShortOption()
+    {
+        $this->static->addOptions('a:');
+
+        $alias = new Getopt_Command_Option_Long('test');
+        $this->static->getOption('a')->addAlias($alias);
+
+        $this->assertSame(
+            $alias,
+            $this->static->getOption('a')->getAlias($alias->getName())
+        );
+    }
+
     public function setUp()
     {
         $this->static = new Getopt_Command_Static(self::DEFAULT_NAME);
