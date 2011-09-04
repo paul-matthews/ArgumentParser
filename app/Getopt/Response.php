@@ -15,6 +15,17 @@ class Getopt_Response
         return $this;
     }
 
+    public function getCommand($commandName)
+    {
+        foreach ($this->commands as $command) {
+            if ($command->getName() == $commandName) {
+                return $command;
+            }
+        }
+
+        throw new OutOfBoundsException('Command not set');
+    }
+
     public function toArray()
     {
         $return = array();

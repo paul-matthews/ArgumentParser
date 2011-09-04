@@ -10,12 +10,14 @@ abstract class Getopt_Command_Abstract
     public function __construct($name)
     {
         $this->name = $name;
+        $this->options = array();
     }
 
     public function getName()
     {
         return $this->name;
     }
+
 
     public function addOption(Getopt_Command_Option_Interface $option)
     {
@@ -58,6 +60,11 @@ abstract class Getopt_Command_Abstract
         }
 
         throw new OutOfBoundsException('Unknown Option');
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     protected function getOptionFactory()

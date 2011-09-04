@@ -9,11 +9,21 @@ class Getopt_Command_Static
         if (!$this->isMatch($request)) {
             return $request;
         }
+        $responseCommand = new Getopt_Response_Command($this->getName());
+
+        for (; $request->valid(); $request->next()) {
+            foreach ($this->getOptions() as $option) {
+                try {
+                    $responseCommand->addOption($option->parse($request));
+                    continue;
+                } catch (Getopt_Command_Option_Exception $e) {
+                    // @todo something
+                }
+            }
+        }
 
         return $request->setResponse(
-            $request->getResponse()->addCommand(
-                new Getopt_Response_Command($this->getName())
-            )
+            $request->getResponse()->addCommand($responseCommand)
         );
     }
 
@@ -22,6 +32,7 @@ class Getopt_Command_Static
         $request->rewind();
 
         if ((string) $request->current() == $this->getName()) {
+            $request->next();
             return true;
         }
         return false;

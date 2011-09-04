@@ -35,6 +35,20 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($found);
     }
 
+    public function testShortOptionParsed()
+    {
+        $this->static->addOptions('a');
+
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('-a'),
+            )
+        ))->getResponse();
+
+        $this->assertTrue($response->getCommand(self::DEFAULT_NAME)->getOption('a')->getValue());
+    }
+
     public function testSetShortOptionString()
     {
         $this->static->addOptions('a');
