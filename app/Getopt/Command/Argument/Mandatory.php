@@ -7,7 +7,7 @@ class Getopt_Command_Argument_Mandatory implements Getopt_Command_Argument_Inter
         if (!$this->isValue($request->peek())) {
             throw new Getopt_Command_Option_Exception('Value not set');
         }
-        return (string) $request->next();
+        return new Getopt_Response_Value((string) $request->next());
     }
 
     protected function isValue($item)

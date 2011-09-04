@@ -40,10 +40,8 @@ abstract class Getopt_Command_Option_Abstract
             throw new Getopt_Command_Option_Exception('Option not set');
         }
 
-        $response = new Getopt_Response_Option($this->getName());
-        $response->setValue($this->getArgument()->parse($request));
-
-        return $response;
+        $response = new Getopt_Response_Container($this->getName());
+        return $response->addValue($this->getArgument()->parse($request));;
     }
 
     public function getArgument()

@@ -9,12 +9,12 @@ class Getopt_Command_Static
         if (!$this->isMatch($request)) {
             return $request;
         }
-        $responseCommand = new Getopt_Response_Command($this->getName());
+        $response = new Getopt_Response_Container($this->getName());
 
         for (; $request->valid(); $request->next()) {
             foreach ($this->getOptions() as $option) {
                 try {
-                    $responseCommand->addOption($option->parse($request));
+                    $response->addValue($option->parse($request));
                     continue;
                 } catch (Getopt_Command_Option_Exception $e) {
                     // @todo something
@@ -22,9 +22,7 @@ class Getopt_Command_Static
             }
         }
 
-        return $request->setResponse(
-            $request->getResponse()->addCommand($responseCommand)
-        );
+        return $response;
     }
 
     protected function isMatch($request)

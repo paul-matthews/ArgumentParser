@@ -5,31 +5,14 @@ class Getopt_Request_Array implements Getopt_Request_Interface
     private $tokens;
     private $response;
 
-    public function __construct(array $input, Getopt_Response $response = null)
+    public function __construct(array $input)
     {
         $this->setTokens($input);
-
-        if (is_null($response)) {
-            $response = new Getopt_Response();
-        }
-
-        $this->setResponse($response);
     }
 
     public function getTokens()
     {
         return $this->tokens;
-    }
-
-    public function setResponse(Getopt_Response $response)
-    {
-        $this->response = $response;
-        return $this;
-    }
-
-    public function getResponse()
-    {
-        return $this->response;
     }
 
     public function current()

@@ -5,10 +5,10 @@ class Getopt_Command_Argument_Optional implements Getopt_Command_Argument_Interf
     public function parse(Getopt_Request_Interface $request)
     {
         if (!$this->isValue($request->peek())) {
-            return true;
+            return new Getopt_Response_Value(true);
         }
 
-        return (string) $request->next();
+        return new Getopt_Response_Value((string) $request->next());
     }
 
     protected function isValue($item)
