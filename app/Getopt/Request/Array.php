@@ -61,6 +61,7 @@ class Getopt_Request_Array implements Getopt_Request_Interface
     {
         $value = $this->next();
         prev($this->tokens);
+        return $value;
     }
 
     protected function setTokens($input)

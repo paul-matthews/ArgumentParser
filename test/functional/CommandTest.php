@@ -98,6 +98,24 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->assertSame($value, $response->getCommand(self::DEFAULT_NAME)->getOption('a')->getValue());
     }
 
+    public function testShortOptionsWithOptionalArgParsed()
+    {
+        $this->static->addOptions('a::b::');
+
+        $value = 'testing';
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('-a'),
+                new Getopt_Tokenizer_Token($value),
+                new Getopt_Tokenizer_Token('-b'),
+            )
+        ))->getResponse();
+
+        $this->assertSame($value, $response->getCommand(self::DEFAULT_NAME)->getOption('a')->getValue());
+        $this->assertTrue($response->getCommand(self::DEFAULT_NAME)->getOption('b')->getValue());
+    }
+
     public function testSetShortOptionString()
     {
         $this->static->addOptions('a');
