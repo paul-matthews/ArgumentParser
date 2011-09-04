@@ -57,6 +57,12 @@ class Getopt_Request_Array implements Getopt_Request_Interface
         return key($this->tokens);
     }
 
+    public function peek()
+    {
+        $value = $this->next();
+        prev($this->tokens);
+    }
+
     protected function setTokens($input)
     {
         foreach ($input as $token) {

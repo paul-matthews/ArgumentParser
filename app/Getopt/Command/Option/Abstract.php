@@ -33,6 +33,17 @@ abstract class Getopt_Command_Option_Abstract
         $this->argument = $argument;
     }
 
+    public function parse(Getopt_Request_Interface $request)
+    {
+        if (!$this->isMatch($request)) {
+            throw new Getopt_Command_Option_Exception('Option not set');
+        }
+
+        $response = new Getopt_Response_Option($this->getName());
+        $response->setValue($this->getArgument()->parse($request));
+
+        return $response;
+    }
 
     public function getArgument()
     {
@@ -56,4 +67,6 @@ abstract class Getopt_Command_Option_Abstract
 
         throw new OutOfBoundsException('Unkown Option Alias');
     }
+
+    protected abstract function isMatch(Getopt_Request_Interface $request);
 }
