@@ -16,6 +16,7 @@ abstract class Getopt_Command_Option_Abstract
             $argument = new Getopt_Command_Argument_None();
         }
         $this->setArgument($argument);
+        $this->aliases = array();
     }
 
     public function getName()
@@ -35,7 +36,7 @@ abstract class Getopt_Command_Option_Abstract
 
     public function parse(Getopt_Request_Interface $request)
     {
-        if (!$this->isMatch($request)) {
+        if (!$this->isMatch($request) && !$this->isAliasMatch($request)) {
             throw new Getopt_Command_Option_Exception('Option not set');
         }
 
@@ -68,5 +69,15 @@ abstract class Getopt_Command_Option_Abstract
         throw new OutOfBoundsException('Unkown Option Alias');
     }
 
-    protected abstract function isMatch(Getopt_Request_Interface $request);
+    public abstract function isMatch(Getopt_Request_Interface $request);
+
+    protected function isAliasMatch($request)
+    {
+        foreach ($this->aliases as $alias) {
+            if ($alias->isMatch($request)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

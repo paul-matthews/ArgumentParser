@@ -5,7 +5,7 @@ class Getopt_Command_Option_Short
     implements Getopt_Command_Option_Interface
 {
 
-    protected function isMatch(Getopt_Request_Interface $request)
+    public function isMatch(Getopt_Request_Interface $request)
     {
         if ($request->current() == "-{$this->getName()}") {
             return true;
