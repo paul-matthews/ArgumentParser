@@ -64,6 +64,40 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($response->getCommand(self::DEFAULT_NAME)->getOption($name)->getValue());
     }
 
+    public function testMultipleShortOptionsParsed()
+    {
+        $this->static->addOptions('abc');
+
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('-a'),
+                new Getopt_Tokenizer_Token('-c'),
+                new Getopt_Tokenizer_Token('-b'),
+            )
+        ))->getResponse();
+
+        $this->assertTrue($response->getCommand(self::DEFAULT_NAME)->getOption('a')->getValue());
+        $this->assertTrue($response->getCommand(self::DEFAULT_NAME)->getOption('b')->getValue());
+        $this->assertTrue($response->getCommand(self::DEFAULT_NAME)->getOption('c')->getValue());
+    }
+
+    public function testShortOptionsWithMandatoryArgParsed()
+    {
+        $this->static->addOptions('a:');
+
+        $value = 'testing';
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('-a'),
+                new Getopt_Tokenizer_Token($value),
+            )
+        ))->getResponse();
+
+        $this->assertSame($value, $response->getCommand(self::DEFAULT_NAME)->getOption('a')->getValue());
+    }
+
     public function testSetShortOptionString()
     {
         $this->static->addOptions('a');
