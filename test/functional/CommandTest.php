@@ -11,7 +11,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
 
     public function testSetShortOption()
     {
-        $this->static->addOption(new Getopt_Command_Option_Short('a', new Getopt_Command_Argument_None()));
+        $this->static->addOption(new Getopt_Command_Option_Short('a'));
 
         $this->assertTrue($this->static->getOption('a') instanceof Getopt_Command_Option_Short);
     }
