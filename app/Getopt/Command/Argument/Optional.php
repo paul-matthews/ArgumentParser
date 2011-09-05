@@ -1,6 +1,8 @@
 <?php
 
-class Getopt_Command_Argument_Optional implements Getopt_Command_Argument_Interface
+class Getopt_Command_Argument_Optional
+    extends Getopt_Command_Argument_Abstract
+    implements Getopt_Command_Argument_Interface
 {
     public function parse(Getopt_Request_Interface $request)
     {
@@ -9,13 +11,5 @@ class Getopt_Command_Argument_Optional implements Getopt_Command_Argument_Interf
         }
 
         return new Getopt_Response_Value((string) $request->next());
-    }
-
-    protected function isValue($item)
-    {
-        if ($item && substr($item, 0, 1) != '-') {
-            return true;
-        }
-        return false;
     }
 }

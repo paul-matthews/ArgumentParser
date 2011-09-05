@@ -7,7 +7,8 @@ class Getopt_Command_Option_Short
 
     public function isMatch(Getopt_Request_Interface $request)
     {
-        if ($request->current() == "-{$this->getName()}") {
+        $indicator = $this->getConfig()->getOptionIndicator();
+        if ($request->current() == "{$indicator}{$this->getName()}") {
             return true;
         }
         return false;
