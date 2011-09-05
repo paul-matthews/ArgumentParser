@@ -15,7 +15,7 @@ abstract class Getopt_Command_Option_Abstract implements Getopt_Configurable
         $specifier = $config->getArgumentSpecifier();
 
         $this->rawName = $name;
-        $this->name = ltrim(rtrim($this->rawName, $specifier), $indicator);
+        $this->name = Getopt_Filter::filter($this->rawName, 'ValueName');
 
         if (is_null($argument)) {
             $argument = new Getopt_Command_Argument_None();
