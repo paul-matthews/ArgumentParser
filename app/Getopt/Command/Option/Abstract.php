@@ -1,6 +1,7 @@
 <?php
 
-abstract class Getopt_Command_Option_Abstract implements Getopt_Configurable
+abstract class Getopt_Command_Option_Abstract
+    implements Getopt_Configurable
 {
     private $config;
     protected $name;
@@ -10,9 +11,6 @@ abstract class Getopt_Command_Option_Abstract implements Getopt_Configurable
 
     public function __construct($name, Getopt_Command_Argument_Interface $argument = null)
     {
-        $config = $this->getConfig();
-        $indicator = $config->getOptionIndicator();
-        $specifier = $config->getArgumentSpecifier();
 
         $this->rawName = $name;
         $this->name = Getopt_Filter::filter($this->rawName, 'ValueName');

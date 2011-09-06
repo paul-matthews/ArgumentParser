@@ -215,7 +215,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
     public function testShortOptionIndicatorCanBeSlash()
     {
         $config = Getopt_Config::getInstance();
-        $config->setOptionIndicator('/');
+        $config->setShortOptionIndicator('/');
         Getopt_Config::setInstance($config);
 
         $this->static->addOptions('a');
@@ -228,6 +228,26 @@ class CommandTest extends PHPUnit_Framework_TestCase
         ))->getValue();
 
         $this->assertTrue($response[self::DEFAULT_NAME]['a']);
+    }
+
+    public function testLongOptionIndicatorCanOnlyBeHyphen()
+    {
+        $config = Getopt_Config::getInstance();
+        $config->setShortOptionIndicator('/');
+        Getopt_Config::setInstance($config);
+
+        $this->static->addLongOptions(array('test1', 'test2'));
+
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('--test1'),
+                new Getopt_Tokenizer_Token('///test2'),
+            )
+        ))->getValue();
+
+        $this->assertTrue($response[self::DEFAULT_NAME]['test1']);
+        $this->assertTrue(!isset($response[self::DEFAULT_NAME]['test2']));
     }
 
     public function setUp()

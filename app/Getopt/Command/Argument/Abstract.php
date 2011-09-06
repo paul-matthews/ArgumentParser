@@ -20,12 +20,19 @@ class Getopt_Command_Argument_Abstract
 
     protected function isValue($item)
     {
-        $identifier = $this->getConfig()->getOptionIndicator();
+        $shortIdent = $this->getConfig()->getShortOptionIndicator();
+        $shortIdentLen = strlen($shortIdent);
+        $longIdent = $this->getConfig()->getLongOptionIndicator();
+        $longIdentLen = strlen($longIdent);
 
-        if ($item && substr($item, 0, strlen($identifier)) != $identifier) {
-            return true;
+        if (
+            !$item
+            || substr($item, 0, $shortIdentLen) == $shortIdent
+            || substr($item, 0, $longIdentLen) == $longIdent
+        ) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     private function getDefaultConfig()

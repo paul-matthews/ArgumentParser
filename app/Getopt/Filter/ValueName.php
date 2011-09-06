@@ -6,9 +6,10 @@ class Getopt_Filter_ValueName
 {
     public function filter($value)
     {
-        $indicator = $this->getConfig()->getOptionIndicator();
+        $shortIndicator = $this->getConfig()->getShortOptionIndicator();
+        $longIndicator = $this->getConfig()->getShortOptionIndicator();
         $specifier = $this->getConfig()->getArgumentSpecifier();
 
-        return ltrim(rtrim($value, $specifier), $indicator);
+        return ltrim(ltrim(rtrim($value, $specifier), $shortIndicator), $longIndicator);
     }
 }

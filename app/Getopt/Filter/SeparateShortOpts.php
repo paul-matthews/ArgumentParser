@@ -7,7 +7,7 @@ class Getopt_Filter_SeparateShortOpts
     public function filter($value)
     {
         $config = $this->getConfig();
-        $indicator = $config->getOptionIndicator();
+        $indicator = $config->getShortOptionIndicator();
         $separators = $config->getOptionValueSeparator();
 
         $regexDelimitor = '/';

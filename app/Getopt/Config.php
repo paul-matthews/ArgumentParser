@@ -2,36 +2,51 @@
 
 class Getopt_Config
 {
-    const DEFAULT_OPTION_INDICATOR = '-';
-    const DEFAULT_ARGUMENT_SPECIFIER = ':';
-    const DEFAULT_SEPARATOR_1  = '=';
-    const DEFAULT_SEPARATOR_2  = ' ';
+    const INDICATOR_HYPHEN  = '-';
+    const INDICATOR_SLASH   = '/';
+
+    const SPECIFIER_COLON = ':';
+
+    const SEPARATOR_EQUALS  = '=';
+    const SEPARATOR_SPACE  = ' ';
 
     public static $instance;
 
-    private $optionIndicator;
+    private $shortOptionIndicator;
+    private $longOptionIndicator;
     private $argumentSpecifier;
 
     public function __construct()
     {
-        $this->setOptionIndicator(self::DEFAULT_OPTION_INDICATOR);
-        $this->setArgumentSpecifier(self::DEFAULT_ARGUMENT_SPECIFIER);
+        $this->setShortOptionIndicator(self::INDICATOR_HYPHEN);
+        $this->setLongOptionIndicator(str_pad('', 2, self::INDICATOR_HYPHEN));
+        $this->setArgumentSpecifier(self::SPECIFIER_COLON);
         $this->setOptionValueSeparators(
             array(
-                self::DEFAULT_SEPARATOR_1,
-                self::DEFAULT_SEPARATOR_2,
+                self::SEPARATOR_EQUALS,
+                self::SEPARATOR_SPACE,
             )
         );
     }
 
-    public function setOptionIndicator($indicator)
+    public function setShortOptionIndicator($indicator)
     {
-        $this->optionIndicator = $indicator;
+        $this->shortOptionIndicator = $indicator;
     }
 
-    public function getOptionIndicator()
+    public function getShortOptionIndicator()
     {
-        return $this->optionIndicator;
+        return $this->shortOptionIndicator;
+    }
+
+    public function setLongOptionIndicator($indicator)
+    {
+        $this->longOptionIndicator = $indicator;
+    }
+
+    public function getLongOptionIndicator()
+    {
+        return $this->longOptionIndicator;
     }
 
     public function setArgumentSpecifier($specifier)
