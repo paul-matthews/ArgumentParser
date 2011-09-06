@@ -10,11 +10,12 @@ class Getopt_Filter_SeparateShortOpts
         $indicator = $config->getOptionIndicator();
         $separators = $config->getOptionValueSeparator();
 
+        $regexDelimitor = '/';
         preg_match_all(
             sprintf(
                 "/^%s([^%s]{%d,})/",
-                $indicator,
-                implode(array_merge(array($indicator), $separators)),
+                preg_quote($indicator, $regexDelimitor),
+                preg_quote(implode(array_merge(array($indicator), $separators)), $regexDelimitor),
                 strlen($indicator)
             ),
             $value,

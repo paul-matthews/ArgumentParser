@@ -212,7 +212,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function theShortOptionIndicatorCanBeSlash()
+    public function testShortOptionIndicatorCanBeSlash()
     {
         $config = Getopt_Config::getInstance();
         $config->setOptionIndicator('/');
@@ -232,7 +232,10 @@ class CommandTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Getopt_Config::resetInstance();
         $this->static = new Getopt_Command_Static(self::DEFAULT_NAME);
+    }
+    public function tearDown()
+    {
+        Getopt_Config::resetInstance();
     }
 }
