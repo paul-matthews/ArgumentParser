@@ -212,8 +212,27 @@ class CommandTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function theShortOptionIndicatorCanBeSlash()
+    {
+        $config = Getopt_Config::getInstance();
+        $config->setOptionIndicator('/');
+        Getopt_Config::setInstance($config);
+
+        $this->static->addOptions('a');
+
+        $response = $this->static->parse(new Getopt_Request_Array(
+            array(
+                new Getopt_Tokenizer_Token(self::DEFAULT_NAME),
+                new Getopt_Tokenizer_Token('/a'),
+            )
+        ))->getValue();
+
+        $this->assertTrue($response[self::DEFAULT_NAME]['a']);
+    }
+
     public function setUp()
     {
+        Getopt_Config::resetInstance();
         $this->static = new Getopt_Command_Static(self::DEFAULT_NAME);
     }
 }
