@@ -10,12 +10,13 @@ class Getopt_Filter_SeparateShortOpts
         $indicator = $config->getOptionIndicator();
         $separators = $config->getOptionValueSeparator();
 
-        $pre = $indicator;
-        $not = implode(array_merge(array($indicator), $separators));
-        $indicatorLen = strlen($indicator);
-
         preg_match_all(
-            sprintf("/^%s([^%s]{%d,})/", $pre, $not, $indicatorLen),
+            sprintf(
+                "/^%s([^%s]{%d,})/",
+                $indicator,
+                implode(array_merge(array($indicator), $separators)),
+                strlen($indicator)
+            ),
             $value,
             $matches
         );
@@ -24,7 +25,7 @@ class Getopt_Filter_SeparateShortOpts
         if (count($matches[1]) && count($matches[1][0]) > 0) {
             $value = array();
             foreach (str_split($matches[1][0]) as $match) {
-                $value[] = "{$indicator}{$match}";
+                $value[] = $indicator . $match;
             }
         }
 
