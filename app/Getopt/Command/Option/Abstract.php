@@ -1,9 +1,7 @@
 <?php
 
 abstract class Getopt_Command_Option_Abstract
-    implements Getopt_Configurable
 {
-    private $config;
     protected $name;
     protected $rawName;
     protected $argument;
@@ -44,7 +42,8 @@ abstract class Getopt_Command_Option_Abstract
         }
 
         $response = new Getopt_Response_Container($this->getName());
-        return $response->addValue($this->getArgument()->parse($request));;
+        $finalResponse = $response->addValue($this->getArgument()->parse($request));;
+        return $finalResponse;
     }
 
     public function getArgument()
@@ -70,19 +69,6 @@ abstract class Getopt_Command_Option_Abstract
         throw new OutOfBoundsException('Unkown Option Alias');
     }
 
-    public function setConfig(Getopt_Config $config)
-    {
-        $this->config = $config;
-    }
-
-    public function getConfig()
-    {
-        if (is_null($this->config)) {
-            $this->setConfig($this->getDefaultConfig());
-        }
-        return $this->config;
-    }
-
     public abstract function isMatch(Getopt_Request_Interface $request);
 
     protected function isAliasMatch($request)
@@ -93,10 +79,5 @@ abstract class Getopt_Command_Option_Abstract
             }
         }
         return false;
-    }
-
-    protected function getDefaultConfig()
-    {
-        return Getopt_Config::getInstance();
     }
 }

@@ -6,10 +6,19 @@ class Getopt_Filter_ValueName
 {
     public function filter($value)
     {
-        $shortIndicator = $this->getConfig()->getShortOptionIndicator();
         $longIndicator = $this->getConfig()->getShortOptionIndicator();
         $specifier = $this->getConfig()->getArgumentSpecifier();
 
-        return ltrim(ltrim(rtrim($value, $specifier), $shortIndicator), $longIndicator);
+        if (Getopt_Validator::isValid($value, 'LongOption')) {
+            $indicator = $this->getConfig()->getLongOptionIndicator();
+            $value = substr($value, strlen($indicator));
+        }
+
+        if (Getopt_Validator::isValid($value, 'ShortOption')) {
+            $indicator = $this->getConfig()->getShortOptionIndicator();
+            $value = substr($value, strlen($indicator));
+        }
+
+        return rtrim($value, $specifier);
     }
 }

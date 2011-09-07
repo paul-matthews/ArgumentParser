@@ -7,8 +7,10 @@ class Getopt_Command_Option_Short
 
     public function isMatch(Getopt_Request_Interface $request)
     {
-        $indicator = $this->getConfig()->getShortOptionIndicator();
-        if ($request->current() == $indicator . $this->getName()) {
+        $item = $request->current();
+        if (Getopt_Validator::isValid($item, 'ShortOption')
+            && Getopt_Filter::filter($item, 'ValueName') == $this->getName()
+        ) {
             return true;
         }
         return false;
