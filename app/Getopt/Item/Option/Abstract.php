@@ -1,20 +1,20 @@
 <?php
 
-abstract class Getopt_Command_Option_Abstract
+abstract class Getopt_Item_Option_Abstract
 {
     protected $name;
     protected $rawName;
     protected $argument;
     protected $aliases;
 
-    public function __construct($name, Getopt_Command_Argument_Interface $argument = null)
+    public function __construct($name, Getopt_Item_Argument_Interface $argument = null)
     {
 
         $this->rawName = $name;
         $this->name = Getopt_Filter::filter($this->rawName, 'ValueName');
 
         if (is_null($argument)) {
-            $argument = new Getopt_Command_Argument_None();
+            $argument = new Getopt_Item_Argument_None();
         }
         $this->setArgument($argument);
         $this->aliases = array();
@@ -30,7 +30,7 @@ abstract class Getopt_Command_Option_Abstract
         return $this->rawName;
     }
 
-    public function setArgument(Getopt_Command_Argument_Interface $argument)
+    public function setArgument(Getopt_Item_Argument_Interface $argument)
     {
         $this->argument = $argument;
     }
@@ -38,7 +38,7 @@ abstract class Getopt_Command_Option_Abstract
     public function parse(Getopt_Request_Interface $request)
     {
         if (!$this->isMatch($request) && !$this->isAliasMatch($request)) {
-            throw new Getopt_Command_Option_Exception('Option not set');
+            throw new Getopt_Item_Option_Exception('Option not set');
         }
 
         $response = new Getopt_Response_Container($this->getName());
@@ -51,7 +51,7 @@ abstract class Getopt_Command_Option_Abstract
         return $this->argument;
     }
 
-    public function addAlias(Getopt_Command_Option_Interface $alias)
+    public function addAlias(Getopt_Item_Option_Interface $alias)
     {
         $alias->setArgument($this->getArgument());
 
@@ -69,7 +69,10 @@ abstract class Getopt_Command_Option_Abstract
         throw new OutOfBoundsException('Unkown Option Alias');
     }
 
-    public abstract function isMatch(Getopt_Request_Interface $request);
+    public function addChild(Getopt_Item $child)
+    {
+        throw new Exception('Unimplemented');
+    }
 
     protected function isAliasMatch($request)
     {

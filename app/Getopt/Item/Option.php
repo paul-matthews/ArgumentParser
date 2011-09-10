@@ -1,15 +1,15 @@
 <?php
 
-class Getopt_Command_Option
+class Getopt_Item_Option
 {
     public function getShortOptions($rawOptions)
     {
         $options = array();
         $shortOptions = Getopt_Filter::filter($rawOptions, 'SeparateShortOptsSpec');
         foreach ($shortOptions as $option) {
-            $options[] = new Getopt_Command_Option_Short(
+            $options[] = new Getopt_Item_Option_Short(
                 $option,
-                new Getopt_Command_Argument_None()
+                new Getopt_Item_Argument_None()
             );
         }
         return $options;
@@ -19,7 +19,7 @@ class Getopt_Command_Option
     {
         $options = array();
         foreach ($rawOptions as $option) {
-            $options[] = new Getopt_Command_Option_Long($option, new Getopt_Command_Argument_None());
+            $options[] = new Getopt_Item_Option_Long($option, new Getopt_Item_Argument_None());
         }
         return $options;
     }

@@ -1,6 +1,6 @@
 <?php
 
-abstract class Getopt_Command_Abstract
+abstract class Getopt_Item_Command_Abstract
 {
     private $name;
     protected $optionFactory;
@@ -19,7 +19,7 @@ abstract class Getopt_Command_Abstract
     }
 
 
-    public function addOption(Getopt_Command_Option_Interface $option)
+    public function addOption(Getopt_Item_Option_Interface $option)
     {
         $this->options[] = $option;
         return $this;
@@ -70,7 +70,7 @@ abstract class Getopt_Command_Abstract
     protected function getOptionFactory()
     {
         if (is_null($this->optionFactory)) {
-            $this->optionFactory = new Getopt_Command_Option();
+            $this->optionFactory = new Getopt_Item_Option();
         }
 
         return $this->optionFactory;
@@ -79,7 +79,7 @@ abstract class Getopt_Command_Abstract
     protected function getArgumentFactory()
     {
         if (is_null($this->argumentFactory)) {
-            $this->argumentFactory = new Getopt_Command_Argument();
+            $this->argumentFactory = new Getopt_Item_Argument();
         }
 
         return $this->argumentFactory;

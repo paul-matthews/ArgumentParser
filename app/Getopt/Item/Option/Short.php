@@ -1,14 +1,14 @@
 <?php
 
-class Getopt_Command_Option_Long
-    extends Getopt_Command_Option_Abstract
-    implements Getopt_Command_Option_Interface
+class Getopt_Item_Option_Short
+    extends Getopt_Item_Option_Abstract
+    implements Getopt_Item_Option_Interface
 {
 
     public function isMatch(Getopt_Request_Interface $request)
     {
         $item = $request->current();
-        if (Getopt_Validator::isValid($item, 'LongOption')
+        if (Getopt_Validator::isValid($item, 'ShortOption')
             && Getopt_Filter::filter($item, 'ValueName') == $this->getName()
         ) {
             return true;

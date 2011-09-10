@@ -1,8 +1,7 @@
 <?php
 
-class Getopt_Command_Static
-    extends Getopt_Command_Abstract
-    implements Getopt_Command_Interface
+class Getopt_Item_Command_Static
+    extends Getopt_Item_Command_Abstract
 {
     public function parse(Getopt_Request_Interface $request)
     {
@@ -16,7 +15,7 @@ class Getopt_Command_Static
                 try {
                     $response->addValue($option->parse($request));
                     continue;
-                } catch (Getopt_Command_Option_Exception $e) {
+                } catch (Getopt_Item_Option_Exception $e) {
                     // @todo something
                 }
             }

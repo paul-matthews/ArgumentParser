@@ -1,6 +1,6 @@
 <?php
 
-class Getopt_Command_Argument
+class Getopt_Item_Argument
 {
     private $config;
 
@@ -10,14 +10,14 @@ class Getopt_Command_Argument
         $mandatory = $this->getMandatory();
 
         if (substr($rawOption, 0 - strlen($optional)) == $optional) {
-            return new Getopt_Command_Argument_Optional();
+            return new Getopt_Item_Argument_Optional();
         }
 
         if (substr($rawOption, 0 - strlen($mandatory)) == $mandatory) {
-            return new Getopt_Command_Argument_Mandatory();
+            return new Getopt_Item_Argument_Mandatory();
         }
 
-        return new Getopt_Command_Argument_None();
+        return new Getopt_Item_Argument_None();
     }
 
     public function getOptional()

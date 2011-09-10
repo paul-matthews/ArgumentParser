@@ -1,6 +1,6 @@
 <?php
 
-class Getopt_Command_Argument_Abstract
+class Getopt_Item_Argument_Abstract
 {
     private $config;
 
