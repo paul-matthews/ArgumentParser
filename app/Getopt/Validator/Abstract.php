@@ -1,7 +1,6 @@
 <?php
 
 abstract class Getopt_Validator_Abstract
-    implements Getopt_Configurable
 {
     private $config;
 

@@ -1,7 +1,6 @@
 <?php
 
 class Getopt_Command_Argument_Abstract
-    implements Getopt_Configurable
 {
     private $config;
 

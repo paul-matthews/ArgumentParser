@@ -1,7 +1,6 @@
 <?php
 
 abstract class Getopt_Filter_Abstract
-    implements Getopt_Configurable
 {
     private $config;
 
