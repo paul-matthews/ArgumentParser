@@ -1,24 +1,28 @@
 <?php
 
-abstract class Getopt_Item_Option_Abstract
+class Getopt_Item_Option_Standard
+    implements Getopt_Item_Option_Interface
 {
     protected $name;
     protected $rawName;
     protected $argument;
+    protected $validator;
     protected $aliases;
 
     public function __construct(
         $name, Getopt_Validator_Interface $validator,
         Getopt_Item_Argument_Interface $argument = null
-    )
-    {
+    ) {
+        $this->validator = $validator;
+        $this->filter = Getopt_Filter::getFilter('ValueName');
 
         $this->rawName = $name;
-        $this->name = Getopt_Filter::filter($this->rawName, 'ValueName');
+        $this->name = $this->filter->filter($this->rawName);
 
         if (is_null($argument)) {
             $argument = new Getopt_Item_Argument_None();
         }
+
         $this->setArgument($argument);
         $this->aliases = array();
     }
@@ -36,6 +40,18 @@ abstract class Getopt_Item_Option_Abstract
     public function setArgument(Getopt_Item_Argument_Interface $argument)
     {
         $this->argument = $argument;
+    }
+
+    public function isMatch(Getopt_Request_Interface $request)
+    {
+        $item = $request->current();
+        if ($this->validator->isValid($item)
+            && $this->filter->filter($item) == $this->getName()
+            && $this->getArgument()->isMatch($request)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     public function parse(Getopt_Request_Interface $request)
@@ -87,3 +103,4 @@ abstract class Getopt_Item_Option_Abstract
         return false;
     }
 }
+

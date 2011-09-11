@@ -2,12 +2,15 @@
 
 class Getopt_Validator
 {
-    public static function isValid($value, $validateName)
+    public static function isValid($value, $name, $options = array())
     {
-        $validateClass = "Getopt_Validator_$validateName";
+        return self::getValidator($name, $options)->isValid($value);
+    }
 
-        $validate = new $validateClass();
+    public static function getValidator($name, $options = array())
+    {
+        $validateClass = "Getopt_Validator_$name";
 
-        return $validate->isValid($value);
+        return new $validateClass($options);
     }
 }

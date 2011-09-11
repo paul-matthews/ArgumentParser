@@ -2,25 +2,73 @@
 
 class Getopt_Item_Option
 {
+    const VALIDATOR     = 'StrStart';
+
+    const TYPE_SHORT    = 0;
+    const TYPE_LONG     = 1;
+
+    private $config;
+
     public function getShortOptions($rawOptions)
     {
+        return $this->getOptions(
+            Getopt_Filter::filter($rawOptions, 'SeparateShortOptsSpec'),
+            self::TYPE_SHORT
+        );
+    }
+
+    public function getLongOptions($rawOptions)
+    {
+        return $this->getOptions($rawOptions, self::TYPE_LONG);
+    }
+
+    protected function getOptions($rawOptions, $type)
+    {
         $options = array();
-        $shortOptions = Getopt_Filter::filter($rawOptions, 'SeparateShortOptsSpec');
-        foreach ($shortOptions as $option) {
-            $options[] = new Getopt_Item_Option_Short(
-                $option,
-                new Getopt_Item_Argument_None()
+        foreach ($rawOptions as $option) {
+            $options[] = new Getopt_Item_Option_Standard(
+                $option, $this->getValidator($type)
             );
         }
         return $options;
     }
 
-    public function getLongOptions($rawOptions)
+    public function getValidator($type)
     {
-        $options = array();
-        foreach ($rawOptions as $option) {
-            $options[] = new Getopt_Item_Option_Long($option, new Getopt_Item_Argument_None());
+        $indicator = $this->getConfig()->getLongOptionIndicator();
+        if ($type == self::TYPE_SHORT) {
+            $indicator = $this->getConfig()->getShortOptionIndicator();
         }
-        return $options;
+
+        return Getopt_Validator::getValidator(
+            self::VALIDATOR,
+            array('start' => $indicator)
+        );
     }
+
+    protected function getOptionIndicator($length)
+    {
+        return implode(array_fill(
+            0, $length, $this->getConfig()->getOptionIndicator()
+        ));
+    }
+
+    public function setConfig(Getopt_Config $config)
+    {
+        $this->config = $config;
+    }
+
+    public function getConfig()
+    {
+        if (is_null($this->config)) {
+            $this->setConfig($this->getDefaultConfig());
+        }
+        return $this->config;
+    }
+
+    private function getDefaultConfig()
+    {
+        return Getopt_Config::getInstance();
+    }
+
 }

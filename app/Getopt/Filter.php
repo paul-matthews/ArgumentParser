@@ -2,12 +2,15 @@
 
 class Getopt_Filter
 {
-    public static function filter($value, $filterName)
+    public static function filter($value, $filterName, $options = array())
     {
-        $filterClass = "Getopt_Filter_$filterName";
+        return self::getFilter($filterName, $options)->filter($value);
+    }
 
-        $filter = new $filterClass();
+    public static function getFilter($filter, $options = array())
+    {
+        $filterClass = "Getopt_Filter_$filter";
 
-        return $filter->filter($value);
+        return new $filterClass($options);
     }
 }

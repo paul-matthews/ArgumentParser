@@ -9,13 +9,6 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->assertSame(self::DEFAULT_NAME, $this->static->getName());
     }
 
-    public function testSetShortOption()
-    {
-        $this->static->addOption(new Getopt_Item_Option_Short('a'));
-
-        $this->assertTrue($this->static->getOption('a') instanceof Getopt_Item_Option_Short);
-    }
-
     public function testStaticCommandAttemptsParse()
     {
         $response = $this->static->parse(new Getopt_Request_Array(
@@ -113,7 +106,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
     public function testAliasOptionParsed()
     {
         $this->static->addOptions('a');
-        $this->static->getOption('a')->addAlias(new Getopt_Item_Option_Long('test'));
+        $this->static->getOption('a')->addAlias($this->getLongOption('test'));
 
         $response = $this->static->parse(new Getopt_Request_Array(
             array(
@@ -123,13 +116,6 @@ class CommandTest extends PHPUnit_Framework_TestCase
         ))->getValue();
 
         $this->assertTrue($response[self::DEFAULT_NAME]['a']);
-    }
-
-    public function testSetShortOptionString()
-    {
-        $this->static->addOptions('a');
-
-        $this->assertTrue($this->static->getOption('a') instanceof Getopt_Item_Option_Short);
     }
 
     public function testSetMandatoryShortOptionString()
@@ -144,20 +130,6 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->static->addOptions('a::');
 
         $this->assertTrue($this->static->getOption('a')->getArgument() instanceof Getopt_Item_Argument_Optional);
-    }
-
-    public function testSetLongOption()
-    {
-        $this->static->addOption(new Getopt_Item_Option_Long('--test'));
-
-        $this->assertTrue($this->static->getOption('test') instanceof Getopt_Item_Option_Long);
-    }
-
-    public function testSetLongOptionString()
-    {
-        $this->static->addLongOptions('test');
-
-        $this->assertTrue($this->static->getOption('test') instanceof Getopt_Item_Option_Long);
     }
 
     public function testSetLongOptionStringOptionalArguments()
@@ -179,7 +151,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
         $this->static->addOptions('a:');
 
         $option = $this->static->getOption('a');
-        $alias = new Getopt_Item_Option_Short('b');
+        $alias = $this->getShortOption('b');
 
         $option->addAlias($alias);
 
@@ -190,7 +162,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
     {
         $this->static->addOptions('a:');
 
-        $alias = new Getopt_Item_Option_Short('b', new Getopt_Item_Argument_None());
+        $alias = $this->getShortOption('b');
         $this->static->getOption('a')->addAlias($alias);
 
         $this->assertSame(
@@ -203,7 +175,7 @@ class CommandTest extends PHPUnit_Framework_TestCase
     {
         $this->static->addOptions('a:');
 
-        $alias = new Getopt_Item_Option_Long('test');
+        $alias = $this->getLongOption('test');
         $this->static->getOption('a')->addAlias($alias);
 
         $this->assertSame(
@@ -253,9 +225,22 @@ class CommandTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->static = new Getopt_Item_Command_Static(self::DEFAULT_NAME);
+        $this->optionFactory = new Getopt_Item_Option();
     }
     public function tearDown()
     {
         Getopt_Config::resetInstance();
+    }
+
+    private function getShortOption($name)
+    {
+        $options = $this->optionFactory->getShortOptions($name);
+        return $options[0];
+    }
+
+    private function getLongOption($name)
+    {
+        $options = $this->optionFactory->getLongOptions(array($name));
+        return $options[0];
     }
 }
