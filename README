@@ -55,3 +55,16 @@ ArgumentParser:
     * -help
     * --help
 * -- Escapes all remaining output as command values
+
+===============================================
+Short option returns true
+Long option returns true
+Short option with optional value
+Long option with optional value
+Short option with Mandatory value
+Long option with Mandatory value
+Missing mandatory value throws exception
+Alias short to another short option
+Alias long option to another long option
+Alias long option to short option
+Alias short option to long option
