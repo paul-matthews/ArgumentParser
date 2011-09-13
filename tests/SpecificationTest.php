@@ -4,9 +4,8 @@ class SpecifciationTest extends PHPUnit_Framework_TestCase
 {
     public function testTokenizerReturnsShortOptions()
     {
-        $go = new Getopt();
-        $result = $go->tokenize(array('-a'));
-        $first = array_pop($result);
+        $result = $this->go->getRequest(array('-a'));
+        $first = $result->current();
 
         $this->assertTrue($first instanceof Getopt_Token_Short);
         $this->assertSame('a', $first->getValue());
@@ -14,9 +13,8 @@ class SpecifciationTest extends PHPUnit_Framework_TestCase
 
     public function testTokenizerReturnsLongOptions()
     {
-        $go = new Getopt();
-        $result = $go->tokenize(array('--test'));
-        $first = array_pop($result);
+        $result = $this->go->getRequest(array('--test'));
+        $first = $result->current();
 
         $this->assertTrue($first instanceof Getopt_Token_Long);
         $this->assertSame('test', $first->getValue());
@@ -24,12 +22,23 @@ class SpecifciationTest extends PHPUnit_Framework_TestCase
 
     public function testTokenizerReturnsValues()
     {
-        $go = new Getopt();
-        $result = $go->tokenize(array('test'));
-        $first = array_pop($result);
+        $result = $this->go->getRequest(array('test'));
+        $first = $result->current();
 
         $this->assertTrue($first instanceof Getopt_Token_Value);
         $this->assertSame('test', $first->getValue());
+    }
+
+    public function testTokenizerReturnsOptionaAndValue()
+    {
+        $result = $this->go->getRequest(array('--foo="test"'));
+        $first = $result->current();
+        $second = $result->next();
+
+        $this->assertTrue($first instanceof Getopt_Token_Long);
+        $this->assertSame('foo', $first->getValue());
+        $this->assertTrue($second instanceof Getopt_Token_Value);
+        $this->assertSame('test', $second->getValue());
     }
 
     public function setUp()

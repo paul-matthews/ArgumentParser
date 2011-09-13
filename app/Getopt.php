@@ -2,6 +2,7 @@
 
 class Getopt
 {
+    const RESPONSE_NAME = __CLASS__;
     private $tokenizer;
     private $commands;
 
@@ -10,23 +11,25 @@ class Getopt
         $this->commands = array();
     }
 
-    public function tokenize($input)
+    public function getRequest(array $input)
     {
-        return $this->getTokenizer()->tokenize($input);
+        return new Getopt_Request($this->tokenize($input));
     }
 
     public function parse()
     {
-        $output = array();
+        $response = new Getopt_Response(self::RESPONSE_NAME);
+
         foreach ($this->commands as $command) {
-            if ($currentOutput = $command->parse($command)) {
-                $output[$command->getName()] = $currentOutput;
+            $currentOutput = $command->parse($command);
+            if ($currentOutput instanceof Getopt_Response) {
+                $response->addChild($currentOutput);
             }
         }
-        return $output;
+        return $response;
     }
 
-    public function addCommand(Getopt_Command_Item $item)
+    public function addCommand(Getopt_Item_Command $item)
     {
         $this->commands[] = $item;
     }
@@ -43,6 +46,11 @@ class Getopt
             $this->tokenizer = $this->getDefaultTokenizer();
         }
         return $this->tokenizer;
+    }
+
+    protected function tokenize($input)
+    {
+        return $this->getTokenizer()->tokenize($input);
     }
 
     protected function getDefaultTokenizer()
