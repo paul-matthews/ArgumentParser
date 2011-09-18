@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="Bootstrap.php">
+    <!--
     <testsuite name="Units">
         <directory suffix="Test.php">unit</directory>
     </testsuite>
+    -->
     <testsuite name="Functional">
         <directory suffix="Test.php">functional</directory>
     </testsuite>

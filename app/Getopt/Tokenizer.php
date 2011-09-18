@@ -2,32 +2,46 @@
 
 class Getopt_Tokenizer
 {
-    private $config;
-
     public function getTokens($input)
     {
+        $input = $this->preTokenization($input);
+
+        $tokens = $this->tokenize($input);
+
+        return $this->postTokenization($tokens);
+    }
+
+    protected function preTokenization($input)
+    {
         if (!is_array($input)) {
-            return $this->getToken($input);
+            $input = array($input);
         }
 
         $tokens = array();
         foreach ($input as $item) {
-            $tokens = array_merge(
-                $tokens,
-                $this->getTokens($item)
-            );
+            foreach (Getopt_Filter::filter($item, 'SeparateShortOpts') as $token) {
+                $tokens[] = $token;
+            }
+        }
+
+        return $tokens;
+    }
+
+    protected function tokenize($input)
+    {
+        foreach ($input as $item) {
+            $tokens[] = $this->getToken($item);
         }
         return $tokens;
     }
 
-    private function getToken($input)
+    protected function postTokenization($input)
     {
-        $tokens = array();
+        return $input;
+    }
 
-        foreach (Getopt_Filter::filter($input, 'SeparateShortOpts') as $token) {
-            $tokens[] = new Getopt_Tokenizer_Token($token);
-        }
-
-        return $tokens;
+    protected function getToken($input)
+    {
+        return new Getopt_Tokenizer_Token($input);
     }
 }
