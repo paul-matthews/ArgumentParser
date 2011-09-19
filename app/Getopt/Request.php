@@ -2,6 +2,13 @@
 
 class Getopt_Request
 {
+    public function __construct(
+        Getopt_Filter $filter = null,
+        Getopt_Mutator $mutator = null
+    ) {
+        // $this->filters =;
+    }
+
     public function getRequest($input)
     {
         if (!is_array($input)) {

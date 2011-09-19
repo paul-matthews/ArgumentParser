@@ -3,6 +3,7 @@
 abstract class Getopt_Filter_Abstract
 {
     private $config;
+    private $children;
 
     public function setConfig(Getopt_Config $config)
     {
