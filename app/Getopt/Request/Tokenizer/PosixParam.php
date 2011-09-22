@@ -3,10 +3,11 @@
 class Getopt_Request_Tokenizer_PosixParam
     extends Getopt_Request_Tokenizer
 {
-    const PREFIX_SHORT_FORMAT = '/^%1$s([^%1$s]{1})$/';
-    const PREFIX_LONG_FORMAT = '/^%1$s%1$s([^%1$s]+)$/';
+    const CONTAINER_FORMAT = '/^%s$/';
+    const PREFIX_SHORT_FORMAT = '%1$s([^%1$s]{1})';
+    const PREFIX_LONG_FORMAT = '%1$s%1$s([^%1$s%2$s]+)';
 
-    private $paramRegexes;
+    protected $paramRegexes;
 
     public function __construct(array $paramRegexes)
     {
@@ -23,7 +24,7 @@ class Getopt_Request_Tokenizer_PosixParam
         return false;
     }
 
-    public function tokenize($arg)
+    public function doTokenize($arg)
     {
         $tokens = array();
         foreach ($this->paramRegexes as $class => $regex) {
@@ -50,11 +51,17 @@ class Getopt_Request_Tokenizer_PosixParam
 
     public static function createShortRegex($shortSpecifier)
     {
-        return sprintf(self::PREFIX_SHORT_FORMAT, $shortSpecifier);
+        return sprintf(
+            self::CONTAINER_FORMAT,
+            sprintf(self::PREFIX_SHORT_FORMAT, $shortSpecifier)
+        );
     }
 
     public static function createLongRegex($shortSpecifier)
     {
-        return sprintf(self::PREFIX_LONG_FORMAT, $shortSpecifier);
+        return sprintf(
+            self::CONTAINER_FORMAT,
+            sprintf(self::PREFIX_LONG_FORMAT, $shortSpecifier, '')
+        );
     }
 }

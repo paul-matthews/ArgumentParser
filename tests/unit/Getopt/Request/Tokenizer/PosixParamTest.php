@@ -53,7 +53,7 @@ class Getopt_Request_Tokenizer_PosixParamTest
         );
 
         $tokens = $paramTokenizer->getTokens(array('-a'));
-        $firstToken = array_pop($tokens);
+        $firstToken = array_shift($tokens);
         $this->assertTrue($firstToken instanceof Getopt_Request_Token_Param_Short);
         $this->assertEquals('a', $firstToken->getValue());
     }
@@ -68,7 +68,7 @@ class Getopt_Request_Tokenizer_PosixParamTest
         );
 
         $tokens = $paramTokenizer->getTokens(array('--foo'));
-        $firstToken = array_pop($tokens);
+        $firstToken = array_shift($tokens);
         $this->assertTrue($firstToken instanceof Getopt_Request_Token_Param_Long);
         $this->assertEquals('foo', $firstToken->getValue());
     }
