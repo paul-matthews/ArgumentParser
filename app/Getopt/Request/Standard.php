@@ -37,7 +37,7 @@ class Getopt_Request_Standard
 
     public function valid()
     {
-        return (boolean) $this->current();
+        return $this->current() !== false;
     }
 
     public function count()
