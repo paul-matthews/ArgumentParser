@@ -9,7 +9,7 @@ class Getopt_Request_Iterator
     public function __construct(Getopt_Request_Standard $request, $key = null)
     {
         $this->key = $key;
-        $this->request = $request;
+        $this->request = clone $request;
     }
 
     public function rewind()
