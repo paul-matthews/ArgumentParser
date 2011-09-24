@@ -4,64 +4,74 @@ class Getopt_Request_Tokenizer_PosixParam
     extends Getopt_Request_Tokenizer
 {
     const CONTAINER_FORMAT = '/^%s$/';
-    const PREFIX_SHORT_FORMAT = '%1$s([^%1$s]{1})';
-    const PREFIX_LONG_FORMAT = '%1$s%1$s([^%1$s%2$s]+)';
+    const PREFIX_FORMAT = '%1$s([^%1$s%2$s]+)';
 
-    protected $paramRegexes;
+    const TOKEN_SHORT = 0;
+    const TOKEN_LONG = 1;
 
-    public function __construct(array $paramRegexes)
+    protected $paramIdentifier;
+    protected $type;
+
+    public function __construct($paramIdentifier)
     {
-        $this->paramRegexes = $paramRegexes;
+        parent::__construct();
+        $this->setParamIdentifier($paramIdentifier);
     }
 
     public function canTokenize($arg)
     {
-        foreach ($this->paramRegexes as $regex) {
-            if (preg_match($regex, $arg)) {
-                return true;
-            }
+        if (preg_match($this->getParamRegex(), $arg)) {
+            return true;
         }
+
         return false;
     }
 
     public function doTokenize($arg)
     {
         $tokens = array();
-        foreach ($this->paramRegexes as $class => $regex) {
-            preg_match_all($regex, $arg, $matches);
+        preg_match_all($this->getParamRegex(), $arg, $matches);
 
-            if (count($matches) > 1 && count($matches[1]) > 0) {
+        if (count($matches) > 1 && count($matches[1]) > 0) {
 
-                foreach ($matches[1] as $match) {
-                    $tokens = array_merge(
-                        $tokens,
-                        array($this->createToken($match, $class))
-                    );
-                }
+            foreach ($matches[1] as $match) {
+                $tokens = array_merge(
+                    $tokens,
+                    array($this->createToken($match, $this->type))
+                );
             }
         }
 
         return $tokens;
     }
 
-    private function createToken($match, $class)
+    protected function createToken($match, $type = self::TOKEN_LONG)
     {
-        return new $class($match);
+        if ($type === self::TOKEN_SHORT) {
+            return new Getopt_Request_Token_Param_Short($match);
+        }
+        if ($type === self::TOKEN_LONG) {
+            return new Getopt_Request_Token_Param_Long($match);
+        }
+
+        return parent::createToken($match, $type);
     }
 
-    public static function createShortRegex($shortSpecifier)
+    protected function setParamIdentifier($identifier)
+    {
+        $this->type = self::TOKEN_SHORT;
+        if (strlen($identifier) > 1) {
+            $this->type = self::TOKEN_LONG;
+        }
+
+        $this->paramIdentifier = $identifier;
+    }
+
+    protected function getParamRegex()
     {
         return sprintf(
             self::CONTAINER_FORMAT,
-            sprintf(self::PREFIX_SHORT_FORMAT, $shortSpecifier)
-        );
-    }
-
-    public static function createLongRegex($shortSpecifier)
-    {
-        return sprintf(
-            self::CONTAINER_FORMAT,
-            sprintf(self::PREFIX_LONG_FORMAT, $shortSpecifier, '')
+            sprintf(self::PREFIX_FORMAT, preg_quote($this->paramIdentifier), '')
         );
     }
 }

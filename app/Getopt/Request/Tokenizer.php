@@ -50,4 +50,9 @@ class Getopt_Request_Tokenizer
     {
         return $arg;
     }
+
+    protected function createToken($token, $type = null)
+    {
+        return new Getopt_Request_Token($token);
+    }
 }

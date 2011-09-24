@@ -3,30 +3,9 @@
 class Getopt_Request_Tokenizer_PosixParamValueTest
     extends PHPUnit_Framework_TestCase
 {
-    public function testCreateShortRegex()
-    {
-        $this->assertEquals(
-            '/^-([^-]{1})="?([^"]*)"?$/',
-            Getopt_Request_Tokenizer_PosixParamValue::createShortRegex('-')
-        );
-    }
-
-    public function testCreateLongRegex()
-    {
-        $this->assertEquals(
-            '/^--([^-=]+)="?([^"]*)"?$/',
-            Getopt_Request_Tokenizer_PosixParamValue::createLongRegex('-')
-        );
-    }
-
     public function testLongMatchesReturnCorrectToken()
     {
-        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParamValue(
-            array(
-                'Getopt_Request_Token_Param_Long'
-                    => Getopt_Request_Tokenizer_PosixParamValue::createLongRegex('-')
-            )
-        );
+        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParamValue('--', '=', '"');
 
         $tokens = $paramTokenizer->getTokens(array('--foo="bar"'));
         $firstToken = array_shift($tokens);
@@ -36,12 +15,7 @@ class Getopt_Request_Tokenizer_PosixParamValueTest
 
     public function testLongWithValueMatchesReturnCorrectToken()
     {
-        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParamValue(
-            array(
-                'Getopt_Request_Token_Param_Long'
-                    => Getopt_Request_Tokenizer_PosixParamValue::createLongRegex('-')
-            )
-        );
+        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParamValue('--', '=', '"');
 
         $tokens = $paramTokenizer->getTokens(array('--foo="bar"'));
         $this->assertEquals(2, count($tokens));
@@ -55,20 +29,26 @@ class Getopt_Request_Tokenizer_PosixParamValueTest
         $this->assertEquals('bar', $secondToken->getValue());
     }
 
+    public function testShortWithValueMatchesReturnCorrectToken()
+    {
+        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParamValue('-', '=', '"');
+
+        $tokens = $paramTokenizer->getTokens(array('-f="bar"'));
+        $this->assertEquals(2, count($tokens));
+
+        $firstToken = array_shift($tokens);
+        $secondToken = array_shift($tokens);
+        $this->assertTrue($firstToken instanceof Getopt_Request_Token_Param_Short);
+        $this->assertEquals('f', $firstToken->getValue());
+
+        $this->assertTrue($secondToken instanceof Getopt_Request_Token_Value);
+        $this->assertEquals('bar', $secondToken->getValue());
+    }
+
     public function testLongMixedValueAndNoneReturnsCorrectTokens()
     {
-        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParam(
-            array(
-                'Getopt_Request_Token_Param_Long'
-                    => Getopt_Request_Tokenizer_PosixParam::createLongRegex('-')
-            )
-        );
-        $paramValueTokenizer = new Getopt_Request_Tokenizer_PosixParamValue(
-            array(
-                'Getopt_Request_Token_Param_Long'
-                    => Getopt_Request_Tokenizer_PosixParamValue::createLongRegex('-')
-            )
-        );
+        $paramTokenizer = new Getopt_Request_Tokenizer_PosixParam('--');
+        $paramValueTokenizer = new Getopt_Request_Tokenizer_PosixParamValue('--', '=', '"');
 
         $paramValueTokenizer->addTokenizer($paramTokenizer);
 
