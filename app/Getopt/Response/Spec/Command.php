@@ -36,8 +36,7 @@ class Getopt_Response_Spec_Command
             $key = 1;
         }
 
-        $iterator = new Getopt_Request_Iterator($request, $key);
-        foreach ($iterator as $currentKey => $arg)
+        foreach (new Getopt_Request_Iterator($request, $key) as $currentKey => $arg)
         {
             foreach ($this->children as $child) {
                 $childName = $child->getName();

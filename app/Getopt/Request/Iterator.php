@@ -14,14 +14,8 @@ class Getopt_Request_Iterator
 
     public function rewind()
     {
-        $this->request->rewind();
-        if (!empty($this->key)) {
-            while (
-                $this->key() !== $this->key && $this->valid()
-            ) {
-                $this->next();
-            }
-        }
+        $this->advanceToKey($this->key);
+
         return $this->current();
     }
 
@@ -43,5 +37,34 @@ class Getopt_Request_Iterator
     public function valid()
     {
         return $this->request->valid();
+    }
+
+    public function prev()
+    {
+        return $this->request->prev();
+    }
+
+
+    public function getNextKey()
+    {
+        $request = clone $this->request;
+        $request->next();
+        $response = $this->key();
+        unset($request);
+
+        return $response;
+    }
+
+    protected function advanceToKey($key = null)
+    {
+        $this->request->rewind();
+
+        if (!is_null($key)) {
+            while (
+                $this->key() !== $key && $this->valid()
+            ) {
+                $this->next();
+            }
+        }
     }
 }

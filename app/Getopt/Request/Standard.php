@@ -40,6 +40,11 @@ class Getopt_Request_Standard
         return $this->current() !== false;
     }
 
+    public function prev()
+    {
+        return prev($this->args);
+    }
+
     public function count()
     {
         return count($this->args);
