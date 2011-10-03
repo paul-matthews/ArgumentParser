@@ -10,6 +10,7 @@ class Getopt_Request_Iterator
     {
         $this->key = $key;
         $this->request = clone $request;
+        $this->rewind();
     }
 
     public function rewind()
@@ -49,7 +50,7 @@ class Getopt_Request_Iterator
     {
         $request = clone $this->request;
         $request->next();
-        $response = $this->key();
+        $response = $request->key();
         unset($request);
 
         return $response;

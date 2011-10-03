@@ -5,7 +5,7 @@ class Getopt_Response_Spec_Value_Null
     implements Getopt_Response_Spec
 {
     const TOSTRING_FORMAT = '[Value_Null: null]';
-    public function parse(Getopt_Request_Standard $request, $key = null)
+    protected function doParse(Getopt_Request_Token $arg)
     {
         return new Getopt_Response_Item(true);
     }

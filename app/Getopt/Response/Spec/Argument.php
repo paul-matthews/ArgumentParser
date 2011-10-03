@@ -22,7 +22,8 @@ class Getopt_Response_Spec_Argument
             throw new Getopt_Response_Spec_NoMatchException($request, "No match $this");
         }
 
-        return $this->value->parse($request, $key);
+        $iterator = new Getopt_Request_Iterator($request, $key);
+        return $this->value->parse($request, $iterator->getNextKey());
     }
 
     public function isMatch(Getopt_Request_Standard $request, $key = null)
@@ -52,11 +53,23 @@ class Getopt_Response_Spec_Argument
 
     protected function match(Getopt_Request_Token $arg)
     {
-        if ($arg instanceof Getopt_Request_Token_Param
-            && $arg->getValue() == $this->getName()
-        ) {
-            return true;
+        if ($arg instanceof Getopt_Request_Token_Param) {
+            switch ($this->value->hasArgMatch($this, $arg)) {
+            case Getopt_Response_Spec_Value::RESPONSE_NO_MATCH:
+                return false;
+                break;
+            case Getopt_Response_Spec_Value::RESPONSE_MATCH:
+                return true;
+                break;
+            case Getopt_Response_Spec_Value::RESPONSE_UNKOWN:
+            default:
+                if ($arg->getValue() == $this->getName()) {
+                    return true;
+                }
+                break;
+            }
         }
+
         return false;
     }
 }

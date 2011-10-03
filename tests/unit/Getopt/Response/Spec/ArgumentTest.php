@@ -8,7 +8,7 @@ class Getopt_Response_Spec_ArgumentTest
         $request = new Getopt_Request_Standard(array(
             new Getopt_Request_Token_Param('a')
         ));
-        $mockValue = $this->getMock('Getopt_Response_Spec_Value_Null', array('isMatch', 'parse'));
+        $mockValue = $this->getMock('Getopt_Response_Spec_Value_Null', array('isMatch', 'parse', 'hasArgMatch'));
 
         $mockValue->expects($this->atLeastOnce())
             ->method('isMatch')
@@ -17,6 +17,10 @@ class Getopt_Response_Spec_ArgumentTest
         $mockValue->expects($this->never())
             ->method('parse')
             ->will($this->returnValue(new Getopt_Response_Item(true)));
+
+        $mockValue->expects($this->atLeastOnce())
+            ->method('hasArgMatch')
+            ->will($this->returnValue(Getopt_Response_Spec_Value::RESPONSE_UNKOWN));
 
         $argument = new Getopt_Response_Spec_Argument('a', $mockValue);
         $this->assertTrue($argument->isMatch($request));
@@ -27,7 +31,7 @@ class Getopt_Response_Spec_ArgumentTest
         $request = new Getopt_Request_Standard(array(
             new Getopt_Request_Token_Param('b')
         ));
-        $mockValue = $this->getMock('Getopt_Response_Spec_Value_Null', array('isMatch', 'parse'));
+        $mockValue = $this->getMock('Getopt_Response_Spec_Value_Null', array('isMatch', 'parse', 'hasArgMatch'));
 
         $mockValue->expects($this->never())
             ->method('isMatch')
@@ -36,6 +40,10 @@ class Getopt_Response_Spec_ArgumentTest
         $mockValue->expects($this->never())
             ->method('parse')
             ->will($this->returnValue(new Getopt_Response_Item(true)));
+
+        $mockValue->expects($this->atLeastOnce())
+            ->method('hasArgMatch')
+            ->will($this->returnValue(Getopt_Response_Spec_Value::RESPONSE_UNKOWN));
 
         $argument = new Getopt_Response_Spec_Argument('a', $mockValue);
         $this->assertFalse($argument->isMatch($request));
@@ -46,7 +54,7 @@ class Getopt_Response_Spec_ArgumentTest
         $request = new Getopt_Request_Standard(array(
             new Getopt_Request_Token_Param('a')
         ));
-        $mockValue = $this->getMock('Getopt_Response_Spec_Value_Null', array('isMatch', 'parse'));
+        $mockValue = $this->getMock('Getopt_Response_Spec_Value_Null', array('isMatch', 'parse', 'hasArgMatch'));
 
         $mockValue->expects($this->atLeastOnce())
             ->method('isMatch')
@@ -55,6 +63,10 @@ class Getopt_Response_Spec_ArgumentTest
         $mockValue->expects($this->atLeastOnce())
             ->method('parse')
             ->will($this->returnValue(new Getopt_Response_Item(true)));
+
+        $mockValue->expects($this->atLeastOnce())
+            ->method('hasArgMatch')
+            ->will($this->returnValue(Getopt_Response_Spec_Value::RESPONSE_UNKOWN));
 
         $argument = new Getopt_Response_Spec_Argument('a', $mockValue);
 
