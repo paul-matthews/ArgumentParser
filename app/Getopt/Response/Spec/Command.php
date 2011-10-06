@@ -22,9 +22,9 @@ class Getopt_Response_Spec_Command
         $this->children[] = $child;
     }
 
-    public function parse(Getopt_Request_Standard $request, $key = null)
+    public function parse(array $request, array $remainingRequest)
     {
-        if (!$this->isMatch($request, $key)) {
+        if (!$this->match($request)) {
             throw new Getopt_Response_Spec_NoMatchException(
                 $request, 'No match for ' . $this->__toString()
             );
@@ -32,30 +32,39 @@ class Getopt_Response_Spec_Command
 
         $response = new Getopt_Response_Item_Items();
 
-        if (empty($key)) {
-            $key = 1;
-        }
-
-        foreach (new Getopt_Request_Iterator($request, $key) as $currentKey => $arg)
-        {
+        while (count($remainingRequest)) {
+            $matched = false;
             foreach ($this->children as $child) {
-                $childName = $child->getName();
+                $subReq = $child->getRequest($remainingRequest);
+                $subRemain = $child->getRemainingRequest($remainingRequest);
 
-                if ($child->isMatch($request, $currentKey)) {
-                    $response->addValue($child->parse($request, $currentKey), $child->getName());
+                try {
+                    $response->addValue($child->parse($subReq, $subRemain), $child->getName());
+                    $remainingRequest = $subRemain;
+                    $matched = true;
+                    break;
+                }
+                catch (Getopt_Response_Spec_NoMatchException $e) {
+                    // Do nothing as no match
                 }
             }
+
+            if (!$matched) {
+                $remainingRequest = array_slice($remainingRequest, 1);
+            }
         }
+
         return $response;
     }
 
-    public function isMatch(Getopt_Request_Standard $request, $key = null)
+    public function getRequest(array $request)
     {
-        foreach (new Getopt_Request_Iterator($request, $key) as $arg) {
-            return $this->match($arg);
-        }
+        return array_slice($request, 0, 1);
+    }
 
-        return false;
+    public function getRemainingRequest(array $request)
+    {
+        return array_slice($request, 1);
     }
 
     public function __toString()
@@ -63,8 +72,9 @@ class Getopt_Response_Spec_Command
         return sprintf('[%s] %s', __CLASS__, $this->name);
     }
 
-    protected function match(Getopt_Request_Token $arg)
+    protected function match(array $tokens)
     {
+        $arg = array_shift($tokens);
         if ($arg instanceof Getopt_Request_Token_Value && $arg->getValue() == $this->name)
         {
             return true;
