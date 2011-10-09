@@ -5,40 +5,40 @@ class Getopt_Response_Spec_CommandTest
 {
     public function testParseReturnsEmptyItemItemsForMatch()
     {
-        $request = array(
-            new Getopt_Request_Token_Value('cmd')
+        $request = new Getopt_Request_Standard(
+            array(
+                new Getopt_Request_Token_Value('cmd')
+            )
         );
 
         $command = new Getopt_Response_Spec_Command('cmd');
-        $this->assertEquals(array(), $command->parse(
-            $command->getRequest($request),
-            $command->getRemainingRequest($request)
-        )->toArray());
+        $this->assertEquals(array(), $command->parse($command->getRequest($request))->toArray());
     }
 
     public function testParseRetunsValidForTwoNestedCommands()
     {
-        $request = array(
-            new Getopt_Request_Token_Value('cmd'),
-            new Getopt_Request_Token_Value('cmd_no2')
+        $request = new Getopt_Request_Standard(
+            array(
+                new Getopt_Request_Token_Value('cmd'),
+                new Getopt_Request_Token_Value('cmd_no2')
+            )
         );
 
         $command = new Getopt_Response_Spec_Command('cmd');
         $command->addChild(new Getopt_Response_Spec_Command('cmd_no2'));
 
-        $this->assertEquals(array('cmd_no2' => array()), $command->parse(
-            $command->getRequest($request),
-            $command->getRemainingRequest($request)
-        )->toArray());
+        $this->assertEquals(array('cmd_no2' => array()), $command->parse($command->getRequest($request))->toArray());
     }
 
     public function testParseRetunsValidForTwoNestedTwoSiblingCommands()
     {
-        $request = array(
-            new Getopt_Request_Token_Value('cmd'),
-            new Getopt_Request_Token_Value('cmd_no2'),
-            new Getopt_Request_Token_Value('cmd_no3'),
-            new Getopt_Request_Token_Value('cmd_no4'),
+        $request = new Getopt_Request_Standard(
+            array(
+                new Getopt_Request_Token_Value('cmd'),
+                new Getopt_Request_Token_Value('cmd_no2'),
+                new Getopt_Request_Token_Value('cmd_no3'),
+                new Getopt_Request_Token_Value('cmd_no4'),
+            )
         );
 
         $command3 = new Getopt_Response_Spec_Command('cmd_no3');
@@ -56,8 +56,7 @@ class Getopt_Response_Spec_CommandTest
                 )
             ),
             $command->parse(
-                $command->getRequest($request),
-                $command->getRemainingRequest($request)
+                $command->getRequest($request)
             )->toArray()
         );
     }
@@ -70,18 +69,17 @@ class Getopt_Response_Spec_CommandTest
      */
     public function testParseRetunsValidForInput($request, $command, $results)
     {
-        $preparedRequest = array();
+        $rawRequest = array();
 
         foreach ($request as $req) {
-            $preparedRequest[] = new Getopt_Request_Token_Value($req);
+            $rawRequest[] = new Getopt_Request_Token_Value($req);
         }
-
+        $preparedRequest = new Getopt_Request_Standard($rawRequest);
 
         $this->assertEquals(
             $results,
             $command->parse(
-                $command->getRequest($preparedRequest),
-                $command->getRemainingRequest($preparedRequest)
+                $command->getRequest($preparedRequest)
             )->toArray()
         );
     }

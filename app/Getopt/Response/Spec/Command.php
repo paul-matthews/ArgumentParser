@@ -22,7 +22,12 @@ class Getopt_Response_Spec_Command
         $this->children[] = $child;
     }
 
-    public function parse(array $request)
+    public function getRequest(Getopt_Request_Standard $request)
+    {
+        return new Getopt_Request_Sub($request, 0, 1);
+    }
+
+    public function parse(Getopt_Request_Standard $request)
     {
         if (!$this->match($request)) {
             throw new Getopt_Response_Spec_NoMatchException(
@@ -31,16 +36,14 @@ class Getopt_Response_Spec_Command
         }
 
         $response = new Getopt_Response_Item_Items();
-
-        while (count($remainingRequest)) {
+        while (count($request)) {
             $matched = false;
             foreach ($this->children as $child) {
-                $subReq = $child->getRequest($remainingRequest);
-                $subRemain = $child->getRemainingRequest($remainingRequest);
-
                 try {
-                    $response->addValue($child->parse($subReq, $subRemain), $child->getName());
-                    $remainingRequest = $subRemain;
+                    $currentRequest = $child->getRequest($request);
+                    $response->addValue($child->parse($currentRequest), $child->getName());
+                    $request = $currentRequest;
+
                     $matched = true;
                     break;
                 }
@@ -50,17 +53,11 @@ class Getopt_Response_Spec_Command
             }
 
             if (!$matched) {
-                $remainingRequest = array_slice($remainingRequest, 1);
+                $request = $this->getRequest($request);
             }
         }
 
         return $response;
-    }
-
-    public function getRequest($request)
-    {
-        return array_slice($request, 0, 1);
-        return array_slice($request, 1);
     }
 
     public function __toString()
@@ -68,9 +65,9 @@ class Getopt_Response_Spec_Command
         return sprintf('[%s] %s', __CLASS__, $this->name);
     }
 
-    protected function match(array $tokens)
+    protected function match($request)
     {
-        $arg = array_shift($tokens);
+        $arg = $request->current();
         if ($arg instanceof Getopt_Request_Token_Value && $arg->getValue() == $this->name)
         {
             return true;

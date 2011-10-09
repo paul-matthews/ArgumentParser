@@ -16,29 +16,20 @@ class Getopt_Response_Spec_Argument
         $this->name = $name;
     }
 
-    public function parse(Getopt_Request_Standard $request, $key = null)
+    public function getRequest(Getopt_Request_Standard $request)
     {
-        if (!$this->isMatch($request, $key)) {
-            throw new Getopt_Response_Spec_NoMatchException($request, "No match $this");
-        }
-
-        $iterator = new Getopt_Request_Iterator($request, $key);
-        return $this->value->parse($request, $iterator->getNextKey());
+        return new Getopt_Request_Sub($request, 0, 1);
     }
 
-    public function isMatch(Getopt_Request_Standard $request, $key = null)
+    public function parse(Getopt_Request_Standard $request)
     {
-        $iterator = new Getopt_Request_Iterator($request, $key);
-        foreach ($iterator as $currentKey => $arg)
-        {
-            if ($this->match($arg)
-                && $this->value->isMatch($request, $iterator->getNextKey())
-            ) {
-                return true;
-            }
-            return false;
+        if (!$this->match($request)) {
+            throw new Getopt_Response_Spec_NoMatchException(
+                $request, 'No match for ' . $this->__toString()
+            );
         }
-        return false;
+
+        return $this->value->parse($this->value->getRequest($request));
     }
 
     public function getName()
@@ -51,23 +42,14 @@ class Getopt_Response_Spec_Argument
         return sprintf(self::TOSTRING_FORMAT, $this->getName());
     }
 
-    protected function match(Getopt_Request_Token $arg)
+    protected function match(Getopt_Request_Standard $request)
     {
-        if ($arg instanceof Getopt_Request_Token_Param) {
-            switch ($this->value->hasArgMatch($this, $arg)) {
-            case Getopt_Response_Spec_Value::RESPONSE_NO_MATCH:
-                return false;
-                break;
-            case Getopt_Response_Spec_Value::RESPONSE_MATCH:
-                return true;
-                break;
-            case Getopt_Response_Spec_Value::RESPONSE_UNKOWN:
-            default:
-                if ($arg->getValue() == $this->getName()) {
-                    return true;
-                }
-                break;
-            }
+        $arg = $request->current();
+
+        if ($arg instanceof Getopt_Request_Token_Param
+            && $this->value->filterArg($arg)->getValue() == $this->getName()
+        ) {
+            return true;
         }
 
         return false;

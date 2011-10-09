@@ -49,4 +49,9 @@ class Getopt_Request_Standard
     {
         return count($this->args);
     }
+
+    public function getAsArray()
+    {
+        return $this->args;
+    }
 }

@@ -5,12 +5,12 @@ class Getopt_Response_Spec_Value_Null
     implements Getopt_Response_Spec
 {
     const TOSTRING_FORMAT = '[Value_Null: null]';
-    protected function doParse(Getopt_Request_Token $arg)
+    protected function doParse(Getopt_Request_Standard $arg)
     {
         return new Getopt_Response_Item(true);
     }
 
-    public function isMatch(Getopt_Request_Standard $request, $key = null)
+    public function match(Getopt_Request_Standard $request)
     {
         return true;
     }
