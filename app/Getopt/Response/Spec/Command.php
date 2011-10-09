@@ -22,7 +22,7 @@ class Getopt_Response_Spec_Command
         $this->children[] = $child;
     }
 
-    public function parse(array $request, array $remainingRequest)
+    public function parse(array $request)
     {
         if (!$this->match($request)) {
             throw new Getopt_Response_Spec_NoMatchException(
@@ -57,13 +57,9 @@ class Getopt_Response_Spec_Command
         return $response;
     }
 
-    public function getRequest(array $request)
+    public function getRequest($request)
     {
         return array_slice($request, 0, 1);
-    }
-
-    public function getRemainingRequest(array $request)
-    {
         return array_slice($request, 1);
     }
 
